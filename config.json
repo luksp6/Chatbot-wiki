@@ -1,0 +1,13 @@
+{
+    "REPO_PATH" : "FS-WIKI-prueba-",
+    "DB_PATH" : "db_wiki",
+    "COLLECTION_NAME" : "db_wiki",
+    "MODEL_NAME" : "sentence-transformers/all-mpnet-base-v2",
+    "LLM_NAME" : "llama3.2",
+    "MAX_BATCH_SIZE" : 166,
+    "CHATBOT_PORT" : 6000,
+    "WEBHOOK_PORT" : 5000,
+    "CHUNK_SIZE" : 1000,
+    "CHUNK_OVERLAP" : 500,
+    "PROMPT" : "Usa la siguiente información para responder a la pregunta del usuario. Si no sabes la respuesta, simplemente di que no lo sabes, no intentes inventar una respuesta. Contexto: {context} Pregunta: {question} . Solo devuelve la respuesta útil a continuación y nada más. Responde siempre en español. Respuesta útil:"
+}

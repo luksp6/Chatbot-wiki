@@ -1,0 +1,6 @@
+.env
+.vscode
+__pycache__
+./FS-WIKI-prueba-
+./db_wiki
+./venv
