@@ -11,6 +11,8 @@ import warnings
 warnings.filterwarnings("ignore")
 
 REPO_NAME = os.getenv('REPO_NAME', 'FS-WIKI-prueba-')
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+REPO_OWNER = os.getenv("REPO_OWNER")
 DB_PATH = os.getenv('DB_PATH', 'wiki_db')
 MODEL_NAME = os.getenv('MODEL_NAME', 'sentence-transformers/all-mpnet-base-v2')
 MAX_BATCH_SIZE = int(os.getenv('MAX_BATCH_SIZE', 166))
@@ -42,6 +44,13 @@ def load_markdown(filepath):
 def update_repo():
     """Actualiza el repositorio local con los últimos cambios de GitHub."""
     print("Actualizando el repositorio desde GitHub...")
+
+    repo_url = f"https://{GITHUB_TOKEN}:x-oauth-basic@github.com/{REPO_OWNER}/{REPO_NAME}.git"
+
+    # Configurar la URL remota para que use el token
+    subprocess.run(["git", "-C", REPO_NAME, "remote", "set-url", "origin", repo_url], check=True)
+
+    # Ejecutar git pull con la URL autenticada
     subprocess.run(["git", "-C", REPO_NAME, "pull"], check=True)
 
 def update_vectors():

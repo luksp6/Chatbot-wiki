@@ -17,8 +17,7 @@ ENV REPO_NAME=${REPO_NAME}
 ARG REPO_OWNER
 ENV REPO_OWNER=${REPO_OWNER}
 
-
-RUN git clone https://${GITHUB_TOKEN}@github.com/${REPO_OWNER}/${REPO_NAME} /app/${REPO_NAME}
+RUN git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/${REPO_OWNER}/${REPO_NAME}.git /app/${REPO_NAME}
 
 # Copiar solo el archivo de requerimientos antes del resto del código
 COPY requirements.txt /app/requirements.txt
@@ -31,6 +30,8 @@ COPY . /app
 
 # Exponer el puerto de la aplicación
 EXPOSE 5000
+
+ENV PYTHONUNBUFFERED=1
 
 # Comando para ejecutar la aplicación
 CMD ["python", "wiki_repo_webhook_server.py"]
