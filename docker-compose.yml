@@ -3,9 +3,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.repo_webhook
+      args:
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
     ports:
       - "${WEBHOOK_PORT}:${WEBHOOK_PORT}"
     environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
       - WEBHOOK_PORT=${WEBHOOK_PORT}
       - REPO_PATH=${REPO_PATH}
       - DB_PATH=${DB_PATH}

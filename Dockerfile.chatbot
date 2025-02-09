@@ -1,23 +1,30 @@
-# Establecer la imagen base
+# Establecer la imagen base de Python 3.10
 FROM python:3.10
 
 # Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Instalar curl y otras herramientas necesarias
-RUN apt update && apt install -y curl
+# Instalar herramientas necesarias
+RUN apt update && apt install -y curl && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Instalar Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
+# Copiar solo el archivo de requerimientos antes del resto del código
+COPY requirements.txt /app/requirements.txt
+
+# Instalar dependencias ANTES de copiar el resto de archivos
+RUN pip install --no-cache-dir -r requirements.txt
+
 # Copiar los archivos de la aplicación al contenedor
 COPY . /app
 
-# Instalar las dependencias
-RUN pip install --no-cache-dir -r requirements.txt
+# Cargar variables de entorno
+ARG LLM_NAME
+ENV LLM_NAME=${LLM_NAME}
 
-# Exponer el puerto de la aplicación
-EXPOSE 6000
+# Exponer los puertos de la aplicación y Ollama
+EXPOSE 6000 11434  
 
-# Comando para ejecutar la aplicación
-CMD ["python", "wiki_chatbot_server.py"]
+# Definir el comando de inicio
+CMD ollama serve & sleep 5 && ollama pull $LLM_NAME && python wiki_chatbot_server.py
