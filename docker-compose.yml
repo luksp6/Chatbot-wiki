@@ -5,12 +5,15 @@ services:
       dockerfile: Dockerfile.repo_webhook
       args:
         - GITHUB_TOKEN=${GITHUB_TOKEN}
+        - REPO_OWNER=${REPO_OWNER}
+        - REPO_NAME=${REPO_NAME}
     ports:
       - "${WEBHOOK_PORT}:${WEBHOOK_PORT}"
     environment:
       - GITHUB_TOKEN=${GITHUB_TOKEN}
       - WEBHOOK_PORT=${WEBHOOK_PORT}
-      - REPO_PATH=${REPO_PATH}
+      - REPO_NAME=${REPO_NAME}
+      - REPO_OWNER=${REPO_OWNER}
       - DB_PATH=${DB_PATH}
       - MODEL_NAME=${MODEL_NAME}
       - MAX_BATCH_SIZE=${MAX_BATCH_SIZE}
@@ -30,7 +33,7 @@ services:
       - "${CHATBOT_PORT}:${CHATBOT_PORT}"
     environment:
       - CHATBOT_PORT=${CHATBOT_PORT}
-      - REPO_PATH=${REPO_PATH}
+      - REPO_NAME=${REPO_NAME}
       - DB_PATH=${DB_PATH}
       - COLLECTION_NAME=${COLLECTION_NAME}
       - MODEL_NAME=${MODEL_NAME}

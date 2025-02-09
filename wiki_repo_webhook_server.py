@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 import warnings
 warnings.filterwarnings("ignore")
 
-REPO_PATH = os.getenv('REPO_PATH', 'FS-WIKI-prueba-')
+REPO_NAME = os.getenv('REPO_NAME', 'FS-WIKI-prueba-')
 DB_PATH = os.getenv('DB_PATH', 'wiki_db')
 MODEL_NAME = os.getenv('MODEL_NAME', 'sentence-transformers/all-mpnet-base-v2')
 MAX_BATCH_SIZE = int(os.getenv('MAX_BATCH_SIZE', 166))
@@ -42,7 +42,7 @@ def load_markdown(filepath):
 def update_repo():
     """Actualiza el repositorio local con los últimos cambios de GitHub."""
     print("Actualizando el repositorio desde GitHub...")
-    subprocess.run(["git", "-C", REPO_PATH, "pull"], check=True)
+    subprocess.run(["git", "-C", REPO_NAME, "pull"], check=True)
 
 def update_vectors():
     """Actualiza solo los archivos modificados en la base de datos de Chroma."""
@@ -52,7 +52,7 @@ def update_vectors():
     db = Chroma(persist_directory=DB_PATH, embedding_function=embeddings, collection_name="db_wiki")
 
     existing_docs = {metadata["source"] for metadata in db.get()["metadatas"]}  # Archivos existentes en la DB
-    new_docs = set(os.listdir(REPO_PATH))  # Archivos en la carpeta actual
+    new_docs = set(os.listdir(REPO_NAME))  # Archivos en la carpeta actual
 
     # Archivos eliminados
     deleted_files = existing_docs - new_docs
@@ -67,7 +67,7 @@ def update_vectors():
         documents = []
         for filename in modified_files:
             if filename.endswith(".md"):
-                filepath = os.path.join(REPO_PATH, filename)
+                filepath = os.path.join(REPO_NAME, filename)
                 text = load_markdown(filepath)                
                 doc = Document(page_content=text, metadata={"source": filename})
                 documents.append(doc)

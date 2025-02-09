@@ -1,5 +1,6 @@
 {
-    "REPO_PATH" : "FS-WIKI-prueba-",
+    "REPO_NAME" : "FS-WIKI-prueba-",
+    "REPO_OWNER" : "luksp6",
     "DB_PATH" : "db_wiki",
     "COLLECTION_NAME" : "db_wiki",
     "MODEL_NAME" : "sentence-transformers/all-mpnet-base-v2",

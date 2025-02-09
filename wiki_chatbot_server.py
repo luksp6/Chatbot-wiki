@@ -10,7 +10,7 @@ import os
 import warnings
 warnings.filterwarnings("ignore")
 
-REPO_PATH = os.getenv('REPO_PATH', 'FS-WIKI-prueba-')
+REPO_NAME = os.getenv('REPO_NAME', 'FS-WIKI-prueba-')
 DB_PATH = os.getenv('DB_PATH', 'wiki_db')
 COLLECTION_NAME = os.getenv('COLLECTION_NAME', 'wiki_db')
 MODEL_NAME = os.getenv('MODEL_NAME', 'sentence-transformers/all-mpnet-base-v2')
