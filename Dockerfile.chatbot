@@ -5,26 +5,41 @@ FROM python:3.10
 WORKDIR /app
 
 # Instalar herramientas necesarias
-RUN apt update && apt install -y curl && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y curl && apt install -y git && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Instalar Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
+# Agregar las credenciales con variables de entorno
+ARG GITHUB_TOKEN
+ENV GITHUB_TOKEN=${GITHUB_TOKEN}
+
+ARG REPO_NAME
+ENV REPO_NAME=${REPO_NAME}
+
+ARG REPO_OWNER
+ENV REPO_OWNER=${REPO_OWNER}
+
+ARG CHATBOT_PORT
+ENV CHATBOT_PORT=${CHATBOT_PORT}
+
+RUN git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/${REPO_OWNER}/${REPO_NAME}.git /app/${REPO_NAME}
+
 # Copiar solo el archivo de requerimientos antes del resto del código
-COPY requirements.txt /app/requirements.txt
+COPY ./chatbot/requirements.txt /app/requirements.txt
 
 # Instalar dependencias ANTES de copiar el resto de archivos
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar los archivos de la aplicación al contenedor
-COPY . /app
+COPY ./chatbot /app
 
 # Cargar variables de entorno
 ARG LLM_NAME
 ENV LLM_NAME=${LLM_NAME}
 
 # Exponer los puertos de la aplicación y Ollama
-EXPOSE 6000 11434  
+EXPOSE ${CHATBOT_PORT} 11434  
 
 # Definir el comando de inicio
-CMD ollama serve & sleep 5 && ollama pull $LLM_NAME && python wiki_chatbot_server.py
+CMD ollama serve & sleep 5 && ollama pull $LLM_NAME && python -m chatbot.__main__

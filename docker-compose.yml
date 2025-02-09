@@ -1,46 +1,30 @@
 services:
-  wiki_repo_webhook:
-    build:
-      context: .
-      dockerfile: Dockerfile.repo_webhook
-      args:
-        - GITHUB_TOKEN=${GITHUB_TOKEN}
-        - REPO_OWNER=${REPO_OWNER}
-        - REPO_NAME=${REPO_NAME}
-    ports:
-      - "${WEBHOOK_PORT}:${WEBHOOK_PORT}"
-    environment:
-      - GITHUB_TOKEN=${GITHUB_TOKEN}
-      - WEBHOOK_PORT=${WEBHOOK_PORT}
-      - REPO_NAME=${REPO_NAME}
-      - REPO_OWNER=${REPO_OWNER}
-      - DB_PATH=${DB_PATH}
-      - MODEL_NAME=${MODEL_NAME}
-      - MAX_BATCH_SIZE=${MAX_BATCH_SIZE}
-      - CHUNK_SIZE=${CHUNK_SIZE}
-      - CHUNK_OVERLAP=${CHUNK_OVERLAP}
-    env_file:
-      - .env
-    volumes:
-      - ./:/app  # Monta el código de tu proyecto en el contenedor
-      - ./db_wiki:/app/db_wiki
-
   wiki_chatbot:
     build:
       context: .
       dockerfile: Dockerfile.chatbot
+      args:
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
+        - REPO_OWNER=${REPO_OWNER}
+        - REPO_NAME=${REPO_NAME}
+        - CHATBOT_PORT=${CHATBOT_PORT}
     ports:
       - "${CHATBOT_PORT}:${CHATBOT_PORT}"
     environment:
       - CHATBOT_PORT=${CHATBOT_PORT}
       - REPO_NAME=${REPO_NAME}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - REPO_OWNER=${REPO_OWNER}
       - DB_PATH=${DB_PATH}
       - COLLECTION_NAME=${COLLECTION_NAME}
       - MODEL_NAME=${MODEL_NAME}
       - LLM_NAME=${LLM_NAME}
       - MAX_BATCH_SIZE=${MAX_BATCH_SIZE}
+      - CHUNK_SIZE=${CHUNK_SIZE}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP}
+      - PROMPT=${PROMPT}
     env_file:
-      - .env
+      - ./chatbot/.env
     volumes:
-      - ./:/app  # Monta el código de tu proyecto en el contenedor
+      - ./chatbot:/app  # Monta el código de tu proyecto en el contenedor
       - ./db_wiki:/app/db_wiki
