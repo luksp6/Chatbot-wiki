@@ -27,24 +27,31 @@ def load_markdown(filepath):
     
     return text_content
 
-async def update_repo():
+def update_repo():
     """Actualiza el repositorio local con los últimos cambios de GitHub."""
     print("Actualizando el repositorio desde GitHub...")
 
     repo_url = f"https://{GITHUB_TOKEN}:x-oauth-basic@github.com/{REPO_OWNER}/{REPO_NAME}.git"
+    repo_path = os.path.join(os.getcwd(), REPO_NAME)
 
-    # Configurar la URL remota para que use el token
-    await subprocess.run(["git", "-C", REPO_NAME, "remote", "set-url", "origin", repo_url], check=True)
 
-    # Ejecutar git pull con la URL autenticada
-    await subprocess.run(["git", "-C", REPO_NAME, "pull"], check=True)
+    if not os.path.isdir(repo_path):
+        print(f"El directorio {repo_path} no existe. Clonando el repositorio...")
+        subprocess.run(["git", "clone", repo_url, repo_path], check=True)
+    else:
+        print(f"El directorio {repo_path} ya existe. Haciendo pull...")
+        subprocess.run(["git", "-C", repo_path, "pull"], check=True)
 
-async def update_vectors():
+
+    # Configurar la URL remota por si cambia el token
+    subprocess.run(["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], check=True)
+
+def update_vectors():
     """Actualiza solo los archivos modificados en la base de datos de Chroma."""
     print("Actualizando vectores en Chroma (solo cambios detectados)...")
 
     # Cargar documentos actuales en la base de datos
-    db = await Chroma(persist_directory=DB_PATH, embedding_function=HuggingFaceEmbeddings(model_name=MODEL_NAME), collection_name="db_wiki")
+    db = Chroma(persist_directory=DB_PATH, embedding_function=HuggingFaceEmbeddings(model_name=MODEL_NAME), collection_name="db_wiki")
 
     existing_docs = {metadata["source"] for metadata in db.get()["metadatas"]}  # Archivos existentes en la DB
     new_docs = set(os.listdir(REPO_NAME))  # Archivos en la carpeta actual
@@ -53,7 +60,7 @@ async def update_vectors():
     deleted_files = existing_docs - new_docs
     if deleted_files:
         print(f"Eliminando {len(deleted_files)} documentos obsoletos de la base de datos...")
-        await db.delete([f for f in deleted_files])  # Elimina los documentos
+        db.delete([f for f in deleted_files])  # Elimina los documentos
 
     # Archivos nuevos o modificados
     modified_files = new_docs - existing_docs
@@ -67,19 +74,19 @@ async def update_vectors():
                 doc = Document(page_content=text, metadata={"source": filename})
                 documents.append(doc)
 
-        text_splitter = await RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
         docs_chunked = text_splitter.split_documents(documents)
 
          # Insertar en lotes para evitar errores de tamaño
         if docs_chunked:
             for i in range(0, len(docs_chunked), MAX_BATCH_SIZE):
                 batch = docs_chunked[i : i + MAX_BATCH_SIZE]
-                await db.add_documents(batch)
+                db.add_documents(batch)
                 print(f"Insertado batch {i // MAX_BATCH_SIZE + 1} de {len(docs_chunked) // MAX_BATCH_SIZE + 1}")
 
-    await db.persist()
+    db.persist()
     print("Vectores actualizados correctamente.")
 
-async def update_data():
-    await update_repo()
-    await update_vectors()
+def update_data():
+    update_repo()
+    update_vectors()

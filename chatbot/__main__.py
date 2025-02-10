@@ -29,12 +29,12 @@ def query_db(request: QueryRequest):
     return {"query": request.query, "results": response}
 
 @app.post(WEBHOOK_ROUTE)
-async def update_db(data: GitHubWebhookData):
+def update_db(data: GitHubWebhookData):
     """Maneja los eventos del webhook de GitHub."""
     if data.ref == "refs/heads/main":
         print("Cambio detectado en la rama principal. Actualizando...")
         try:
-            await update_data()
+            update_data()
             return {"status": "success", "message": "Repositorio y vectores actualizados."}
         except Exception as e:
             print(f"Error al actualizar: {e}")

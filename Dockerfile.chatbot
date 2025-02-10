@@ -41,5 +41,8 @@ ENV LLM_NAME=${LLM_NAME}
 # Exponer los puertos de la aplicación y Ollama
 EXPOSE ${CHATBOT_PORT} 11434  
 
+# Desactivar el buffering de stdout y stderr
+ENV PYTHONUNBUFFERED=1
+
 # Definir el comando de inicio
-CMD ollama serve & sleep 5 && ollama pull $LLM_NAME && python -m chatbot.__main__
+CMD ollama serve & sleep 5 && ollama pull $LLM_NAME && python /app/__main__.py

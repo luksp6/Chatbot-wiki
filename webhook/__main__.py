@@ -13,9 +13,9 @@ class GitHubWebhookData(BaseModel):
     ref: str | None = None
 
 @app.post("/github-webhook")
-async def github_webhook(data: GitHubWebhookData):
-    print(data)
-    response = await requests.post(CHATBOT_URL+":"+str(CHATBOT_PORT)+WEBHOOK_ROUTE, data)
+def github_webhook(data: GitHubWebhookData):
+    url = CHATBOT_URL+":"+str(CHATBOT_PORT)+WEBHOOK_ROUTE
+    response = requests.post(url, json=data.model_dump())
     msg = ""
     if response.status_code == 200:
         msg = "Solicitud exitosa:"

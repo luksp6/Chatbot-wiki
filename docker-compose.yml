@@ -24,7 +24,7 @@ services:
       - CHUNK_OVERLAP=${CHUNK_OVERLAP}
       - PROMPT=${PROMPT}
     env_file:
-      - ./chatbot/.env
+      - .env
     volumes:
       - ./chatbot:/app  # Monta el código de tu proyecto en el contenedor
       - ./db_wiki:/app/db_wiki
