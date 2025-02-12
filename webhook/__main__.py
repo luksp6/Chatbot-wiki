@@ -14,11 +14,12 @@ class GitHubWebhookData(BaseModel):
 
 @app.post("/github-webhook")
 def github_webhook(data: GitHubWebhookData):
+    print("Cambio detectado en la rama principal. Actualizando...")
     url = CHATBOT_URL+":"+str(CHATBOT_PORT)+WEBHOOK_ROUTE
     response = requests.post(url, json=data.model_dump())
     msg = ""
     if response.status_code == 200:
-        msg = "Solicitud exitosa:"
+        msg = "Repositorio y vectores actualizados."
         print(msg, response.json())
     else:
         msg = response.text
