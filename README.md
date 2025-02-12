@@ -6,9 +6,10 @@ Este proyecto consiste en un chatbot basado en inteligencia artificial capaz de 
 
 El proyecto se compone de dos partes principales:
 
-1. **Chatbot (Dockerizado)**: Aplicación principal que gestiona las consultas y respuestas. Posee dos endpoints
+1. **Chatbot (Dockerizado)**: Aplicación principal que gestiona las consultas y respuestas. Posee tres endpoints
    * POST "/query": Endpoint para consultas. Recibe como parámetro un diccionario con la forma { "query": <CONSULTA> }.
    * POST "/update-db": Endpoint encargado de actualizar la base de conocimientos del chatbot. Captura la notificación del GitHub Webhook y actualiza la copia local del repositorio, procesa la información y actualiza los vectores de la base de datos.
+   * GET "/change-model-variables": Endpoint encargado de recargar las constantes del modelo definidas en el archivo .env. Elimina por completo la base de datos y la reconstruye en base a los nuevos parámetros. Es necesaria su invocación luego de realizar alguna modificación en el archivo .env.
 3. **Webhook (Ejecutado localmente)**: Servicio encargado de recibir eventos desde GitHub y actualizar la base de conocimientos del chatbot mediante su endpoint dedicado.
 
 ---
