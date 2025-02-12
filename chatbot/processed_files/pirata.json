@@ -1,0 +1,146 @@
+{
+    "Pirata": "La clase más arriesgada de estas tierras. No les importa adentrarse en alta mar aún sin tener experiencia en conocer a fondo los mismos. Aman guardar tesoros, son hábiles ladrones, pero le temen a los poderosos guerreros. Es por eso que su habilidad principal es tomar ítems, guardarlos y luego escapar. Muchos combatientes de Fúrius los contratan como mercenarios para guardar los objetos que se vayan acumulando a lo largo de sus cacerías en los Dungeons. El Pirata es la única clase capaz que fundar clan de manera natural. [(ver Clanes)](/clanes) Reduccion de parálisis La parálisis lanzada hacia el pirata dura 5 segundos. Aventurero Arriesgado Puede entrar a los Dungeons a partir de nivel 18. Riqueza 10% de posibilidades que no se caigan los ítems al morir. Mano Sigilosa Aumenta en 5% las posibilidades de robar. Pies sigilosos Permite moverse mientras se está oculto. Robo lejano Permite robar a una distacia de hasta 4 tiles. Ropa Pirata Altos Ropa Pirata Bajos Escudo de tortuga Todas Bandana Pirata Todas Sable Todas ALTOS BAJOS CAÑÓN BALA DE CAÑÓN Evasión 0.80 Evasion con escudo 0.80 Probabilidad de pegar cuerpo a cuerpo 0.85 Daño cuerpo a cuerpo 0.80 Probabilidad de pegar con arco y flecha 0.80 Daño con arco y flecha 0.80 Humano 10 129 de vida 237 de vida 327 de vida 417 de vida Enano 10.5 136 de vida 250 de vida 345 de vida 440 de vida",
+    "tables": [
+        [
+            "| **Nombre** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Reduccion de parálisis |"
+        ],
+        [
+            "| Aventurero Arriesgado |"
+        ],
+        [
+            "| **Nombre** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Riqueza |"
+        ],
+        [
+            "| Mano Sigilosa |"
+        ],
+        [
+            "| **Nombre** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Pies sigilosos |"
+        ],
+        [
+            "| Robo lejano |"
+        ],
+        [
+            "| **Imagen** |"
+        ],
+        [
+            "| **Raza** |",
+            "| --- |"
+        ],
+        [
+            "| --- |",
+            "| ![](images/luchador/pirata/ropah.png) |"
+        ],
+        [
+            "| Altos |",
+            "| ![](images/luchador/pirata/ropag.png) |"
+        ],
+        [
+            "| Bajos |",
+            "| ![](images/luchador/pirata/90.png) |"
+        ],
+        [
+            "| Todas |",
+            "| ![](images/luchador/pirata/bandana.png) |"
+        ],
+        [
+            "| Todas |",
+            "| ![](images/luchador/pirata/sable.png) |"
+        ],
+        [
+            "| Todas |"
+        ],
+        [
+            "| ALTOS |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| ![](images/fulles/pirah.png) |"
+        ],
+        [
+            "| CAÑÓN |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| ![](images/trabajador/herrero/3612.png) |"
+        ],
+        [
+            "| Evasión |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Evasion con escudo |"
+        ],
+        [
+            "| Probabilidad de pegar cuerpo a cuerpo |"
+        ],
+        [
+            "| Daño cuerpo a cuerpo |"
+        ],
+        [
+            "| Probabilidad de pegar con arco y flecha |"
+        ],
+        [
+            "| Daño con arco y flecha |"
+        ],
+        [
+            "| **Raza** |"
+        ],
+        [
+            "| **Nivel 13** |"
+        ],
+        [
+            "| **Nivel 35** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Humano  <br>![](images/razas/cara_humano.png) |"
+        ],
+        [
+            "| 129 de vida |"
+        ],
+        [
+            "| 327 de vida |"
+        ],
+        [
+            "| Enano  <br>![](images/razas/cara_enano.png) |"
+        ],
+        [
+            "| 136 de vida |"
+        ],
+        [
+            "| 345 de vida |"
+        ]
+    ]
+}

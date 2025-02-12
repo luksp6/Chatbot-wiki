@@ -1,0 +1,155 @@
+{
+    "Provisiones": "Las provisiones son un punto importante, recuerda llevar contigo algo para beber y tomar ya que te puedes quedar sin energia. Manzana roja 10 1 Porción de tarta 15 2 Frutas del bosque 15 2 Pan de trigo 20 3 Pan de maíz 20 3 Pez 2 3 Sandía 25 5 Pastel 25 10 Chuleta 50 10 Queso de cabra 50 5 Pollo 75 7 Carpa 75 25 Pez espada 90 66 Merluza 100 100 Hipocampo 100 150 Agua 30 3 Cerveza 60 7 Vino 90 10 Jugo de frutas 100 12 Sidra Real 100 25 DamaJuana 100 50",
+    "tables": [
+        [
+            "| **Imagen** |"
+        ],
+        [
+            "| **Hambre** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| ![Archivo:9.png](images/provisiones/9.png) |"
+        ],
+        [
+            "| 10  |"
+        ],
+        [
+            "| ![Archivo:10.png](images/provisiones/10.png) |"
+        ],
+        [
+            "| 15  |"
+        ],
+        [
+            "| ![Archivo:11.png](images/provisiones/11.png) |"
+        ],
+        [
+            "| 15  |"
+        ],
+        [
+            "| ![Archivo:12.png](images/provisiones/12.png) |"
+        ],
+        [
+            "| 20  |"
+        ],
+        [
+            "| ![Archivo:13.png](images/provisiones/13.png) |"
+        ],
+        [
+            "| 20  |"
+        ],
+        [
+            "| ![Archivo:14.png](images/provisiones/14.png) |"
+        ],
+        [
+            "| 2   |"
+        ],
+        [
+            "| ![Archivo:15.png](images/provisiones/15.png) |"
+        ],
+        [
+            "| 25  |"
+        ],
+        [
+            "| ![Archivo:16.png](images/provisiones/16.png) |"
+        ],
+        [
+            "| 25  |"
+        ],
+        [
+            "| ![Archivo:17.png](images/provisiones/17.png) |"
+        ],
+        [
+            "| 50  |"
+        ],
+        [
+            "| ![Archivo:18.png](images/provisiones/18.png) |"
+        ],
+        [
+            "| 50  |"
+        ],
+        [
+            "| ![Archivo:19.png](images/provisiones/19.png) |"
+        ],
+        [
+            "| 75  |"
+        ],
+        [
+            "| ![Archivo:20.png](images/provisiones/20.png) |"
+        ],
+        [
+            "| 75  |"
+        ],
+        [
+            "| ![Archivo:21.png](images/provisiones/21.png) |"
+        ],
+        [
+            "| 90  |"
+        ],
+        [
+            "| ![Archivo:22.png](images/provisiones/22.png) |"
+        ],
+        [
+            "| 100 |"
+        ],
+        [
+            "| ![](images/provisiones/820.bmp) |"
+        ],
+        [
+            "| 100 |"
+        ],
+        [
+            "| **Imagen** |"
+        ],
+        [
+            "| **Sed** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| ![Archivo:23.png](images/provisiones/23.png) |"
+        ],
+        [
+            "| 30  |"
+        ],
+        [
+            "| ![Archivo:24.png](images/provisiones/24.png) |"
+        ],
+        [
+            "| 60  |"
+        ],
+        [
+            "| ![Archivo:25.png](images/provisiones/25.png) |"
+        ],
+        [
+            "| 90  |"
+        ],
+        [
+            "| ![Archivo:26.png](images/provisiones/26.png) |"
+        ],
+        [
+            "| 100 |"
+        ],
+        [
+            "| ![](images/provisiones/16159.bmp) |"
+        ],
+        [
+            "| 100 |"
+        ],
+        [
+            "| ![](images/provisiones/16157.bmp) |"
+        ],
+        [
+            "| 100 |"
+        ]
+    ]
+}

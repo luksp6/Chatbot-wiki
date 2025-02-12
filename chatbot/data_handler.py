@@ -5,13 +5,12 @@ import os
 import subprocess
 import re
 import hashlib
+import json
 import chromadb.api
 from langchain_community.vectorstores import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.schema import Document
-from markdown import markdown
-from bs4 import BeautifulSoup
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -29,53 +28,6 @@ def get_file_hash(filepath):
         hasher.update(f.read())
     return hasher.hexdigest()
 
-def load_markdown(filepath):
-    """
-    Carga un archivo Markdown y aplica preprocesamiento para mejorar la calidad del texto.
-    - Elimina YAML Front Matter
-    - Convierte Markdown a texto limpio
-    - Conserva encabezados y estructura semántica
-    - Elimina imágenes y enlaces sin texto descriptivo
-    """
-    
-    # Cargar el archivo Markdown
-    with open(filepath, 'r', encoding='utf-8') as file:
-        content = file.read()
-
-    # Eliminar YAML Front Matter (encabezado entre '---')
-    content = re.sub(r"^---.*?---\s*", "", content, flags=re.DOTALL)
-
-    # Convertir Markdown a HTML
-    html_content = markdown(content)
-
-    # Parsear HTML con BeautifulSoup
-    soup = BeautifulSoup(html_content, 'html.parser')
-
-    # Eliminar imágenes y enlaces sin texto descriptivo
-    for img in soup.find_all("img"):
-        img.decompose()  # Elimina la etiqueta <img>
-
-    for a in soup.find_all("a"):
-        if not a.text.strip():  # Si el enlace no tiene texto visible, eliminarlo
-            a.decompose()
-
-    # Convertir tablas a texto plano (manteniendo formato)
-    for table in soup.find_all("table"):
-        rows = []
-        for row in table.find_all("tr"):
-            cols = [col.get_text(strip=True) for col in row.find_all(["td", "th"])]
-            rows.append(" | ".join(cols))
-        table_text = "\n".join(rows)
-        table.replace_with(table_text)  # Reemplazar la tabla con texto formateado
-
-    # Extraer el texto limpio manteniendo estructura
-    text_content = soup.get_text(separator="\n")
-
-    # Eliminar espacios en blanco innecesarios
-    text_content = re.sub(r'\n\s*\n', '\n', text_content)  # Quita líneas en blanco extras
-
-    return text_content
-
 def update_repo():
     """Actualiza el repositorio local con los últimos cambios de GitHub."""
     print("Actualizando el repositorio desde GitHub...")
@@ -91,12 +43,80 @@ def update_repo():
         print(f"El directorio {repo_path} ya existe. Haciendo pull...")
         subprocess.run(["git", "-C", repo_path, "pull"], check=True)
 
-
     # Configurar la URL remota por si cambia el token
     subprocess.run(["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], check=True)
 
-def load_documents_from_repo():
+def load_markdown(filepath):
+    """Carga un archivo Markdown y retorna su contenido"""
+    with open(filepath, 'r', encoding='utf-8') as file:
+        content = file.read()
+    return content
+
+def extract_title(md_content):
+    """Extrae el título del documento desde el YAML Front Matter o el primer encabezado."""
+    title = None
+    yaml_title_match = re.search(r"^title:\s*(.*)", md_content, re.MULTILINE)
+    if yaml_title_match:
+        title = yaml_title_match.group(1).strip()    
+    return title
+
+def extract_text(md_content):
+    """Extrae solo el texto principal del archivo Markdown sin formato adicional."""
+    # Eliminar metadatos YAML (encabezado del archivo Markdown)
+    md_content = re.sub(r"^---.*?---\s*", '', md_content, flags=re.DOTALL)
+    # Eliminar imagenes
+    text_content = re.sub(r'!\[.*?\]\(.*?\)', '', md_content)
+    # Eliminar encabezados de tablas
+    text_content = re.sub(r'\*\*.*?\*\*', '', text_content)
+     # Eliminar <br /> (etiqueta HTML de salto de línea)
+    text_content = re.sub(r'<br\s*/?>', '', text_content)    
+    # Eliminar #
+    text_content = re.sub(r'\#', '', text_content)    
+    # Eliminar |
+    text_content = re.sub(r'\|', '', text_content)
+    # Eliminar las ocurrencias de ---
+    text_content = re.sub(r'-', '', text_content)
+    # Limpiar espacios extras y saltos de línea innecesarios
+    text_content = re.sub(r'\n+', ' ', text_content)  # Reemplazar saltos de línea múltiples por un espacio
+    text_content = re.sub(r'\s{2,}', ' ', text_content)  # Reemplazar múltiples espacios por un solo espacio
+    # Eliminar espacios al inicio y al final
+    text_content = text_content.strip()
+    return text_content
+
+def extract_tables(md_content):
+    """Extrae las tablas en Markdown conservando su estructura."""
+    tables = []
+    matches = re.findall(r"(\|.*?\|(?:\n\|.*?\|)*)", md_content)
+    for match in matches:
+        rows = [row.strip() for row in match.split("\n") if row.strip()]
+        tables.append(rows)
+    return tables
+
+def process_markdown_to_json(filepath):
+    """Convierte un archivo Markdown a JSON estructurado."""
+    content = load_markdown(filepath)
+    title = extract_title(content)
+    main_text = extract_text(content)
+    tables = extract_tables(content)
+
+    # Construir el diccionario final
+    json_data = {
+        title: main_text,
+        "tables": tables
+    }
+
+    # Guardar el archivo JSON
+    os.makedirs("processed_files", exist_ok=True)
+    json_filename = os.path.splitext(os.path.basename(filepath))[0] + ".json"
+    json_filepath = os.path.join("processed_files", json_filename)
+    with open(json_filepath, 'w', encoding='utf-8') as f:
+        json.dump(json_data, f, indent=4, ensure_ascii=False)
+
+    return json_data
+
+def load_documents():
     """Carga y preprocesa todos los documentos Markdown del repositorio con sus hashes."""
+    print("Cargando documentos...")
     repo_path = get_repo_path()
     documents = []
 
@@ -104,8 +124,8 @@ def load_documents_from_repo():
         if filename.endswith(".md"):
             filepath = os.path.join(repo_path, filename)
             file_hash = get_file_hash(filepath)
-            text = load_markdown(filepath)
-            documents.append(Document(page_content=text, metadata={"source": filename, "hash": file_hash}))
+            content = json.dumps(process_markdown_to_json(filepath), ensure_ascii=False, indent=4)
+            documents.append(Document(page_content=content, metadata={"source": filename, "hash": file_hash}))
 
     return documents
 
@@ -117,7 +137,7 @@ def update_vectors():
     print("Actualizando vectores en Chroma...")
 
     existing_docs = {metadata["source"]: metadata.get("hash", "") for metadata in db.get()["metadatas"]}
-    repo_docs = {doc.metadata["source"]: doc.metadata["hash"] for doc in load_documents_from_repo()}
+    repo_docs = {doc.metadata["source"]: doc.metadata["hash"] for doc in load_documents()}
 
     # Archivos eliminados
     deleted_files = set(existing_docs) - set(repo_docs)
@@ -133,7 +153,7 @@ def update_vectors():
         if filename not in existing_docs or existing_docs[filename] != file_hash:
             modified_files.append(filename)
             filepath = os.path.join(get_repo_path(), filename)
-            text = load_markdown(filepath)
+            text = load_documents(filepath)
             updated_documents.append(Document(page_content=text, metadata={"source": filename, "hash": file_hash}))
 
     # Eliminar las versiones antiguas de los archivos modificados antes de reindexarlos
@@ -168,7 +188,7 @@ def rebuild_database():
     embeddings = HuggingFaceEmbeddings(model_name=MODEL_NAME)
     db = Chroma(persist_directory=DB_PATH, embedding_function=embeddings, collection_name=COLLECTION_NAME)
 
-    documents = load_documents_from_repo()
+    documents = load_documents()
     if not documents:
         print("No se encontraron documentos Markdown en el repositorio.")
 

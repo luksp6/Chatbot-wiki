@@ -1,0 +1,262 @@
+{
+    "Sastre": "El confecciona las túnicas y gorros más poderosos de estas tierras. Para la fabricación de estos ítems necesitas pieles de lobo, oso pardo y oso/lobo polar, además de un costurero. Con hacerle doble click al costurero aparecerá una ventana con la descripción de los objetos y la posibilidad de crearlos. El sastre puede utilizar el que se vende en cualquier tienda de Sastres para matar lobos y osos y así recibir más pieles. Entre 20 y 30. Entre 6 y 10. Entre 15 y 20. Entre 6 y 10. Túnica legendaria (Altos) 400 40 80 85 Túnica legendaria (Bajos) 400 40 80 85 Trampa visual 508 90 Túnica avismal (Altos) 440 60 100 100 Túnica avismal (Bajos) 440 60 100 100 Túnica rorlock (Altos) 400 80 100 100 Túnica rorlock (Bajos) 400 80 100 100 Túnica lagred (Altos) 520 96 148 100 Túnica lagred (Bajos) 520 96 148 100 Túnica Kaftan (Altos) 224 8 100 Túnica Kaftan (Bajos) 224 8 100 Túnica Durlock (Altos) 400 60 136 100 Túnica Durlock (Bajos) 400 60 136 100 Túnica Zagreb (Altos) 480 64 160 100 Túnica Zagreb (Bajos) 480 64 160 100 Túnica del Liro (Altos) 360 60 100 100 Túnica del Liro (Bajos) 360 60 100 100 Ropa Pirata (Altos) 250 35 85 100 Ropa Pirata (Bajos) 250 35 85 100 Sombrero de hechicero 496 32 72 100 Sombrero de hechicero experto 320 72 96 100 Gorro Pirata 400 10 100 Gorro tizoc 800 100 Casco de lobo 1400 8 8 100 _Nota: Estos valores contemplan la recompensa del nivel 18, que consiste en un 20% menos de requerimiento de pieles._ Se reducen en un 20% los costos de creación. *Esta recompensa es única y se activa automáticamente",
+    "tables": [
+        [
+            "| **Criatura** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| ![](images/criaturas_hostiles/238.png) |"
+        ],
+        [
+            "| ![](images/criaturas_hostiles/263.png) |"
+        ],
+        [
+            "| ![](images/criaturas_hostiles/249.png) |"
+        ],
+        [
+            "| ![](images/criaturas_hostiles/264.png) |"
+        ],
+        [
+            "| **Gráfico** |"
+        ],
+        [
+            "| ![](images/trabajador/sastre/lobi.png) |"
+        ],
+        [
+            "| ![](images/trabajador/sastre/polar.png) |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| ![Archivo:179.png](images/trabajador/sastre/179.png) |"
+        ],
+        [
+            "| 400 |"
+        ],
+        [
+            "| 80  |"
+        ],
+        [
+            "| ![Archivo:180.png](images/trabajador/sastre/180.png) |"
+        ],
+        [
+            "| 400 |"
+        ],
+        [
+            "| 80  |"
+        ],
+        [
+            "| ![Archivo:184.png](images/trabajador/sastre/184.png) |"
+        ],
+        [
+            "| 508 |"
+        ],
+        [
+            "| -   |"
+        ],
+        [
+            "| ![Archivo:297.png](images/trabajador/sastre/297.png) |"
+        ],
+        [
+            "| 440 |"
+        ],
+        [
+            "| 100 |"
+        ],
+        [
+            "| ![Archivo:298.png](images/trabajador/sastre/298.png) |"
+        ],
+        [
+            "| 440 |"
+        ],
+        [
+            "| 100 |"
+        ],
+        [
+            "| ![Archivo:302.png](images/trabajador/sastre/302.png) |"
+        ],
+        [
+            "| 400 |"
+        ],
+        [
+            "| 100 |"
+        ],
+        [
+            "| ![Archivo:303.png](images/trabajador/sastre/303.png) |"
+        ],
+        [
+            "| 400 |"
+        ],
+        [
+            "| 100 |"
+        ],
+        [
+            "| ![Archivo:295.png](images/trabajador/sastre/295.png) |"
+        ],
+        [
+            "| 520 |"
+        ],
+        [
+            "| 148 |"
+        ],
+        [
+            "| ![Archivo:296.png](images/trabajador/sastre/296.png) |"
+        ],
+        [
+            "| 520 |"
+        ],
+        [
+            "| 148 |"
+        ],
+        [
+            "| ![](images/tunicas/178.png) |"
+        ],
+        [
+            "| 224 |"
+        ],
+        [
+            "| 8   |"
+        ],
+        [
+            "| ![](images/tunicas/1880.bmp) |"
+        ],
+        [
+            "| 224 |"
+        ],
+        [
+            "| 8   |"
+        ],
+        [
+            "| ![Archivo:304342.png](images/trabajador/sastre/304342.png) |"
+        ],
+        [
+            "| 400 |"
+        ],
+        [
+            "| 136 |"
+        ],
+        [
+            "| ![Archivo:304342.png](images/trabajador/sastre/304342.png) |"
+        ],
+        [
+            "| 400 |"
+        ],
+        [
+            "| 136 |"
+        ],
+        [
+            "| ![](images/tunicas/10231.bmp) |"
+        ],
+        [
+            "| 480 |"
+        ],
+        [
+            "| 160 |"
+        ],
+        [
+            "| ![](images/tunicas/zagreb%20e.jpg) |"
+        ],
+        [
+            "| 480 |"
+        ],
+        [
+            "| 160 |"
+        ],
+        [
+            "| ![](images/tunicas/299.png) |"
+        ],
+        [
+            "| 360 |"
+        ],
+        [
+            "| 100 |"
+        ],
+        [
+            "| ![](images/tunicas/300.png) |"
+        ],
+        [
+            "| 360 |"
+        ],
+        [
+            "| 100 |"
+        ],
+        [
+            "| ![](images/trabajador/sastre/493.png) |"
+        ],
+        [
+            "| 250 |"
+        ],
+        [
+            "| 85  |"
+        ],
+        [
+            "| ![](images/trabajador/sastre/495.png) |"
+        ],
+        [
+            "| 250 |"
+        ],
+        [
+            "| 85  |"
+        ],
+        [
+            "| ![Archivo:193.png](images/trabajador/sastre/193.png) |"
+        ],
+        [
+            "| 496 |"
+        ],
+        [
+            "| 72  |"
+        ],
+        [
+            "| ![Archivo:192.png](images/trabajador/sastre/192.png) |"
+        ],
+        [
+            "| 320 |"
+        ],
+        [
+            "| 96  |"
+        ],
+        [
+            "| ![](images/trabajador/sastre/3647.png) |"
+        ],
+        [
+            "| 400 |"
+        ],
+        [
+            "| -   |"
+        ],
+        [
+            "| ![Archivo:285.png](images/trabajador/sastre/285.png) |"
+        ],
+        [
+            "| 800 |"
+        ],
+        [
+            "| -   |"
+        ],
+        [
+            "| ![Archivo:285.png](images/trabajador/sastre/lobo.png) |"
+        ],
+        [
+            "| 1400 |"
+        ],
+        [
+            "| 8   |"
+        ],
+        [
+            "| **Efecto** |",
+            "| --- |",
+            "| Se reducen en un 20% los costos de creación. |"
+        ]
+    ]
+}

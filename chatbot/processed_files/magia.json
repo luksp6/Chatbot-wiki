@@ -1,0 +1,525 @@
+{
+    "Magia": "Dentro de la magia podemos encontrar tres tipos de hechizos, los hechizos blancos, los negros y los que son especiales de las clases. Cada uno requiere de un mínimo de maná, de skills, y en las clases mágicas necesitás equiparte [varas mágicas](/varas_magicas). Los hechizos se compran en diferentes ciudades. Ullathorpe Dardo mágico Curar veneno Flecha mágica Curar heridas leves Portal luminoso Nix Flecha eléctrica Curar heridas graves Misil mágico Paralizar Remover parálisis Banderbill Invisibilidad Tormenta de fuego Inmovilizar Descarga eléctrica Apocalipsis Invocar elemental de agua Arghal Flecha eléctrica Curar heridas graves Misil mágico Paralizar Remover parálisis Invisibilidad Tormenta de fuego Inmovilizar Descarga eléctrica Apocalipsis Invocar elemental de agua Lindos Provocar hambre Terrible hambre de Igor Torpeza Celeridad Fuerza Debilidad Llamado a la naturaleza Invocar Zombies Estupidez Remover estupidez Hillidian Invocar elemental de fuego/tierra Resucitar Aura divina Llamado a las sombras Maldición furiosa Sombra de poder Regeneración Materializar comida/bebida Silencio de los inocentes Protección divina Musica ancestra Arco encantado Tormenta eléctrica Flecha inmovilizadora Curar veneno 10 Cura el envenenamiento. NIHIL VED 12 200 Ninguno Curar heridas leves 15 Restaura entre 1 y 15 puntos de vida al objetivo. CORP SANC 10 500 Ninguno Celeridad 20 Aumenta la agilidad del usuario que recibe el hechizo. YUP A'INC 40 12050 Ninguno Fuerza 35 Aumenta la fuerza del usuario que recibe el hechizo. Ar A'kron 50 15000 Ninguno Regeneración 50 Cura entre 40 y 60 puntos de vida. Agsda Venum 50 500000 Ninguno Curar heridas graves 38 Restaura de 15 a 40 puntos de salud al objetivo. EN CORP SANCTIS 40 35000 Ninguno Llamado a la naturaleza 25 Implora ayuda a la madre naturaleza, tres lobos acudirán en tu ayuda. Nature et worg 50 14000 Ninguno Remover parálisis 40 Elimina la parálisis del objetivo. AN HOAX VORP 300 33000 Ninguno Remover estupidez 45 Recupera el control de su personaje. AN ASYNC GAM ALÛ 300 50000 Ninguno Invocar zombis 35 Invoca la ayuda de los muertos, tres zombis acudirán en tu ayuda. MoÎ cámus 110 20000 Ninguno Invisibilidad 87 Vuelve invisible por unos segundos a tu personaje u otro usuario. ROHL ÙX MAÏO 500 210000 Bastón nudoso Elemental de Agua 87 Invocar elemental de agua, que le pega sólo a criaturas. Wata Mantra'rax 950 350000 Bastón nudoso Portal Luminoso 90 Al tirar este hechizo, podrás usar teletransportación hacia una ciudad. Lûmiatu's phortâl 700 5000FAPS [(ver FApoints)](/fapoints) Ninguno Provocar Hambre 3 Retira de 20 a 50 puntos de hambre al usuario. ÔL AEX 20 100 Ninguno Dardo Mágico 5 Causa 1/5 puntos de daño al objetivo. OHL VOR PEK 10 500 Ninguno Flecha Mágica 12 Causa de 6 a 12 puntos de daño al objetivo. VAX PER 20 2300 Ninguno Torpeza 20 Reduce la agilidad del usuario que recibe el hechizo. ASYNC YUP A'INC 20 13500 Ninguno Flecha Eléctrica 22 Causa 12/20 puntos de daño al objetivo. SUN VAP 35 4500 Ninguno Estupidez 100 El objetivo pierde control sobre su personaje. ASYNC GAM ALÛ 500 100000 Ninguno Debilidad 35 Reduce la fuerza del usuario que recibe el hechizo. Xoom varp 45 13500 Ninguno Terrible Hambre de Igôr 35 Retira todos los puntos de hambre al usuario. Ki Gor´ Dah 350 30000 Ninguno Misil mágico 35 Causa de 25 a 35 puntos de daño al objetivo. VAX IN TAR 45 9000 Ninguno Paralizar 60 Paraliza completamente al objetivo. HOAX VORP 350 50000 Vara de fresno Inmovilizar 60 Paraliza parcialmente al objetivo. Är Prop s'uo 300 70000 Vara de fresno Tormenta de fuego 60 Causa de 40 a 60 puntos de daño al objetivo. EN VAX ON TAR 210 64000 Vara de fresno Descarga Eléctrica 85 Causa de 55 a 75 puntos de daño al objetivo. T'HY KOOOL 460 1200000 Bastón nudoso Apocalipsis 100 Causa de 87 a 98 puntos de daño al objetivo. Rahma Nañarak O'al 1000 2400000 Bastón nudoso *El precio de los hechizos es teniendo 0 skill en comerciar. Llamado a las sombras 100 Los personajes que tenemos en el rango de visión pierden su invisibilidad. Ðhëték’ O’zhê 1000 5000000 Mago Invocar elemental de tierra 90 Invocar elemental de tierra, que paraliza al rival. Mu Mantra'rax 950 1500000 Druida Invocar elemental de fuego 100 Invoca un elemental de fuego, que le tira tormentas de fuego al rival. Evarg Icrem Oth 900 950000 Druida Sombra de poder 80 Aumenta la fuerza y agilidad del objetivo. Ka' Shad 275 650000 Asesino Silencio de inocentes 85 Te vuelve invisible y te permite moverte sin que se escuchen tus pasos. NUEVO: Al atacar el efecto se terminará. 600 650000 Asesino Tormenta eléctrica 85 Causa de 170 a 190 puntos de daño al objetivo. T'HY RKA'NA KOOL 390 650000 Paladín Aura divina 80 Aumenta la fuerza y agilidad del objetivo. Mo' Oveius 450 999000 Paladín Resucitar (C) 75 Resucita a un usuario muerto.* AHIL KNÄ XÄR 900 900000 Clérigo Resucitar (N) 75 Resucita a un usuario muerto (Es necesario juntar energía de la gente viva a tu alrededor) AHIL KNÄ XÄR 900 2000000 Nigromante Materializar comida 80 Genera comida en el tile donde es lanzada. Ash'a Vah'sta 50 1000000 Clérigo Materializar bebida 80 Genera bebida en el tile donde es lanzada. Ash'a Vah'ulam 50 1000000 Clérigo Protección divina 80 Vuelve invisible por unos segundos a tu personaje sin que seas detectado por ningún hechizo. 950 1350000 Clérigo Maldición furiosa 75 Provoca envenenamiento en tu cuerpo debilitándote durante 4 segundos si no se toma un antídoto o se cura el mismo. Causa entre 20 y 25 de daño al objetivo por segundo. Extrudere Factum 650 850000 Druida y Nigromante Música ancestral 75 Las criaturas no te atacan por 50 segundos. ôrus ÿurtã 550 1350000 Bardo Arco Encantado 80 Aumenta el golpe con arco Thal Amn 250 675000 Cazador Flecha inmovilizadora 80 Crea un efecto de inmovilizacion sobre tu arco, inmovilizandolo a tu contrincante en tu próximo ataque. F'yu inë 400 1390000 Cazador * Los druidas requieren el báculo delideral para lanzar sus hechizos especiales. * El nigromante y el mago requieren el báculo sagrado para lanzar sus hechizos especiales. * Todas estas magias especiales pueden ser lanzadas a partir de nivel 34. * El nigromante debe ser nivel 40 y recolectar energía especial para poder lanzar el hechizo.",
+    "tables": [
+        [
+            "| **Ciudad** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Ullathorpe |"
+        ],
+        [
+            "| Nix |"
+        ],
+        [
+            "| Banderbill |"
+        ],
+        [
+            "| Arghal |"
+        ],
+        [
+            "| Lindos |"
+        ],
+        [
+            "| Hillidian |"
+        ],
+        [
+            "| **Nombre** |"
+        ],
+        [
+            "| **Características** |"
+        ],
+        [
+            "| **Mana** |"
+        ],
+        [
+            "| **Báculo requerido** |",
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |",
+            "| Curar veneno |"
+        ],
+        [
+            "| Cura el envenenamiento. |"
+        ],
+        [
+            "| 12  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Curar heridas leves |"
+        ],
+        [
+            "| Restaura entre 1 y 15 puntos de vida al objetivo. |"
+        ],
+        [
+            "| 10  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Celeridad |"
+        ],
+        [
+            "| Aumenta la agilidad del usuario que recibe el hechizo. |"
+        ],
+        [
+            "| 40  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Fuerza |"
+        ],
+        [
+            "| Aumenta la fuerza del usuario que recibe el hechizo. |"
+        ],
+        [
+            "| 50  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Regeneración |"
+        ],
+        [
+            "| Cura entre 40 y 60 puntos de vida. |"
+        ],
+        [
+            "| 50  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Curar heridas graves |"
+        ],
+        [
+            "| Restaura de 15 a 40 puntos de salud al objetivo. |"
+        ],
+        [
+            "| 40  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Llamado a la naturaleza |"
+        ],
+        [
+            "| Implora ayuda a la madre naturaleza, tres lobos acudirán en tu ayuda. |"
+        ],
+        [
+            "| 50  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Remover parálisis |"
+        ],
+        [
+            "| Elimina la parálisis del objetivo. |"
+        ],
+        [
+            "| 300 |"
+        ],
+        [
+            "| Ninguno |",
+            "| Remover estupidez |"
+        ],
+        [
+            "| Recupera el control de su personaje. |"
+        ],
+        [
+            "| 300 |"
+        ],
+        [
+            "| Ninguno |",
+            "| Invocar zombis |"
+        ],
+        [
+            "| Invoca la ayuda de los muertos, tres zombis acudirán en tu ayuda. |"
+        ],
+        [
+            "| 110 |"
+        ],
+        [
+            "| Ninguno |",
+            "| Invisibilidad |"
+        ],
+        [
+            "| Vuelve invisible por unos segundos a tu personaje u otro usuario. |"
+        ],
+        [
+            "| 500 |"
+        ],
+        [
+            "| Bastón nudoso |",
+            "| Elemental de Agua |"
+        ],
+        [
+            "| Invocar elemental de agua, que le pega sólo a criaturas. |"
+        ],
+        [
+            "| 950 |"
+        ],
+        [
+            "| Bastón nudoso |",
+            "| Portal Luminoso |"
+        ],
+        [
+            "| Al tirar este hechizo, podrás usar teletransportación hacia una ciudad. |"
+        ],
+        [
+            "| 700 |"
+        ],
+        [
+            "| Ninguno |"
+        ],
+        [
+            "| **Nombre** |"
+        ],
+        [
+            "| **Características** |"
+        ],
+        [
+            "| **Mana** |"
+        ],
+        [
+            "| **Báculo requerido** |",
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |",
+            "| Provocar Hambre |"
+        ],
+        [
+            "| Retira de 20 a 50 puntos de hambre al usuario. |"
+        ],
+        [
+            "| 20  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Dardo Mágico |"
+        ],
+        [
+            "| Causa 1/5 puntos de daño al objetivo. |"
+        ],
+        [
+            "| 10  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Flecha Mágica |"
+        ],
+        [
+            "| Causa de 6 a 12 puntos de daño al objetivo. |"
+        ],
+        [
+            "| 20  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Torpeza |"
+        ],
+        [
+            "| Reduce la agilidad del usuario que recibe el hechizo. |"
+        ],
+        [
+            "| 20  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Flecha Eléctrica |"
+        ],
+        [
+            "| Causa 12/20 puntos de daño al objetivo. |"
+        ],
+        [
+            "| 35  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Estupidez |"
+        ],
+        [
+            "| El objetivo pierde control sobre su personaje. |"
+        ],
+        [
+            "| 500 |"
+        ],
+        [
+            "| Ninguno |",
+            "| Debilidad |"
+        ],
+        [
+            "| Reduce la fuerza del usuario que recibe el hechizo. |"
+        ],
+        [
+            "| 45  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Terrible Hambre de Igôr |"
+        ],
+        [
+            "| Retira todos los puntos de hambre al usuario. |"
+        ],
+        [
+            "| 350 |"
+        ],
+        [
+            "| Ninguno |",
+            "| Misil mágico |"
+        ],
+        [
+            "| Causa de 25 a 35 puntos de daño al objetivo. |"
+        ],
+        [
+            "| 45  |"
+        ],
+        [
+            "| Ninguno |",
+            "| Paralizar |"
+        ],
+        [
+            "| Paraliza completamente al objetivo. |"
+        ],
+        [
+            "| 350 |"
+        ],
+        [
+            "| Vara de fresno |",
+            "| Inmovilizar |"
+        ],
+        [
+            "| Paraliza parcialmente al objetivo. |"
+        ],
+        [
+            "| 300 |"
+        ],
+        [
+            "| Vara de fresno |",
+            "| Tormenta de fuego |"
+        ],
+        [
+            "| Causa de 40 a 60 puntos de daño al objetivo. |"
+        ],
+        [
+            "| 210 |"
+        ],
+        [
+            "| Vara de fresno |",
+            "| Descarga Eléctrica |"
+        ],
+        [
+            "| Causa de 55 a 75 puntos de daño al objetivo. |"
+        ],
+        [
+            "| 460 |"
+        ],
+        [
+            "| Bastón nudoso |",
+            "| Apocalipsis |"
+        ],
+        [
+            "| Causa de 87 a 98 puntos de daño al objetivo. |"
+        ],
+        [
+            "| 1000 |"
+        ],
+        [
+            "| Bastón nudoso |"
+        ],
+        [
+            "| **Nombre** |"
+        ],
+        [
+            "| **Características** |"
+        ],
+        [
+            "| **Mana** |"
+        ],
+        [
+            "| **Clase** |",
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |",
+            "| Llamado a las sombras |"
+        ],
+        [
+            "| Los personajes que tenemos en el rango de visión pierden su invisibilidad. |"
+        ],
+        [
+            "| 1000 |"
+        ],
+        [
+            "| Mago |",
+            "| Invocar elemental de tierra |"
+        ],
+        [
+            "| Invocar elemental de tierra, que paraliza al rival. |"
+        ],
+        [
+            "| 950 |"
+        ],
+        [
+            "| Druida |",
+            "| Invocar elemental de fuego |"
+        ],
+        [
+            "| Invoca un elemental de fuego, que le tira tormentas de fuego al rival. |"
+        ],
+        [
+            "| 900 |"
+        ],
+        [
+            "| Druida |",
+            "| Sombra de poder |"
+        ],
+        [
+            "| Aumenta la fuerza y agilidad del objetivo. |"
+        ],
+        [
+            "| 275 |"
+        ],
+        [
+            "| Asesino |",
+            "| Silencio de inocentes |"
+        ],
+        [
+            "| Te vuelve invisible y te permite moverte sin que se escuchen tus pasos. NUEVO: Al atacar el efecto se terminará. |"
+        ],
+        [
+            "| 600 |"
+        ],
+        [
+            "| Asesino |",
+            "| Tormenta eléctrica |"
+        ],
+        [
+            "| Causa de 170 a 190 puntos de daño al objetivo. |"
+        ],
+        [
+            "| 390 |"
+        ],
+        [
+            "| Paladín |",
+            "| Aura divina |"
+        ],
+        [
+            "| Aumenta la fuerza y agilidad del objetivo. |"
+        ],
+        [
+            "| 450 |"
+        ],
+        [
+            "| Paladín |",
+            "| Resucitar (C) |"
+        ],
+        [
+            "| Resucita a un usuario muerto.* |"
+        ],
+        [
+            "| 900 |"
+        ],
+        [
+            "| Clérigo |",
+            "| Resucitar (N) |"
+        ],
+        [
+            "| Resucita a un usuario muerto (Es necesario juntar energía de la gente viva a tu alrededor) |"
+        ],
+        [
+            "| 900 |"
+        ],
+        [
+            "| Nigromante |",
+            "| Materializar comida |"
+        ],
+        [
+            "| Genera comida en el tile donde es lanzada. |"
+        ],
+        [
+            "| 50  |"
+        ],
+        [
+            "| Clérigo |",
+            "| Materializar bebida |"
+        ],
+        [
+            "| Genera bebida en el tile donde es lanzada. |"
+        ],
+        [
+            "| 50  |"
+        ],
+        [
+            "| Clérigo |",
+            "| Protección divina |"
+        ],
+        [
+            "| Vuelve invisible por unos segundos a tu personaje sin que seas detectado por ningún hechizo. |"
+        ],
+        [
+            "| 950 |"
+        ],
+        [
+            "| Clérigo |",
+            "| Maldición furiosa |"
+        ],
+        [
+            "| Provoca envenenamiento en tu cuerpo debilitándote durante 4 segundos si no se toma un antídoto o se cura el mismo.  <br>Causa entre 20 y 25 de daño al objetivo por segundo. |"
+        ],
+        [
+            "| 650 |"
+        ],
+        [
+            "| Druida y Nigromante |",
+            "| Música ancestral |"
+        ],
+        [
+            "| Las criaturas no te atacan por 50 segundos. |"
+        ],
+        [
+            "| 550 |"
+        ],
+        [
+            "| Bardo |",
+            "| Arco Encantado |"
+        ],
+        [
+            "| Aumenta el golpe con arco |"
+        ],
+        [
+            "| 250 |"
+        ],
+        [
+            "| Cazador |",
+            "| Flecha inmovilizadora |"
+        ],
+        [
+            "| Crea un efecto de inmovilizacion sobre tu arco, inmovilizandolo a tu contrincante en tu próximo ataque. |"
+        ],
+        [
+            "| 400 |"
+        ],
+        [
+            "| Cazador |"
+        ]
+    ]
+}

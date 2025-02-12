@@ -1,0 +1,63 @@
+{
+    "Navegación": "Este continente tiene sus tierras firmes, mares y océanos. Las embarcaciones te serán necesarias para recorrer el mundo. Su uso es simple, una vez que estás próximo al agua, sólo con clickear sobre las embarcaciones o presionar la tecla U navegarás con las flechas. Los tres tipo de embarcaciones las fabrican los [carpinteros](/carpintero). Barca 40 Pescador y Pirata 70 Otras clases 1/5 1/5 Galera 55 Pescador y Pirata 20/35 10/15 Galeón 65 Pescador y Pirata 45/65 15/20 Barca antigua 70 Todas las clases 1/5 1/5 Barca ciudadana 70 Todas las clases Solo para ciudadanos 1/5 1/5 Barca criminal 70 Todas las clases Solo para criminales 1/5 1/5 Ten en cuenta que necesitas ser nivel 18 y poseer los skills necesarios para navegar, independientemente de tu clase. Las barcas ciudadana y criminal, sólo se consigue con FAPoints. [(Ver FAPoints)](/fapoints)",
+    "tables": [
+        [
+            "| **Imagen** |"
+        ],
+        [
+            "| **Skills necesarios** |"
+        ],
+        [
+            "| **Defensa** |",
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |",
+            "| ![Barca](images/navegacion/Barca.png) |"
+        ],
+        [
+            "| 40  <br>Pescador y Pirata  <br>70  <br>Otras clases |"
+        ],
+        [
+            "| 1/5 |",
+            "| ![Archivo:Galera.png](images/navegacion/Galera.png) |"
+        ],
+        [
+            "| 55  <br>Pescador y Pirata |"
+        ],
+        [
+            "| 10/15 |",
+            "| ![Archivo:Galeon.png](images/navegacion/Galeon.png) |"
+        ],
+        [
+            "| 65  <br>Pescador y Pirata |"
+        ],
+        [
+            "| 15/20 |",
+            "| ![](images/navegacion/barcaantigua.png) |"
+        ],
+        [
+            "| 70  <br>Todas las clases |"
+        ],
+        [
+            "| 1/5 |",
+            "| ![](images/navegacion/barcaciuda.PNG) |"
+        ],
+        [
+            "| 70  <br>Todas las clases - Solo para ciudadanos |"
+        ],
+        [
+            "| 1/5 |",
+            "| ![](images/navegacion/barcacrimi.PNG) |"
+        ],
+        [
+            "| 70  <br>Todas las clases - Solo para criminales |"
+        ],
+        [
+            "| 1/5 |"
+        ]
+    ]
+}

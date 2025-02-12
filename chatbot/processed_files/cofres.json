@@ -1,0 +1,315 @@
+{
+    "Cofres": "Los cofres son dropeados por diferentes criaturas en las zonas calientes. Cada vez que alguien encuentre alguno de los tres cofres que existen pueden optar entre agarrarlos o abrirlos en el lugar. Cuando alguien abre un cofre aparece en consola su nick y el mapa donde está. Para abrir los cofres, se deberá contar con las llaves del tesoro que podrás canjear por [FApoints](/fapoints). __ => Monedas de oro Obtienes hasta un máximo de 100,000 Poción de los dioses Aumenta un 10% la experiencia adquirida Pociones azules Recupera maná Pociones Rojas Recupera vida Pociones Amarillas Aumenta agilidad Pociones Verdes Aumenta fuerza Poder de dioses Cambia el color de la palabra de tus hechizos Poción de invisibilidad Poción de invisibilidad, no gasta maná Poción de amor El amor es FúriusAO Máscara Cambia tu cara aleatoriamente Portal luminoso Portal para ir de ciudad a ciudad FastDrop Equipo full aleatorio Items sorpresa Items coloridos aleatorios => Monedas de oro Obtienes hasta un máximo de 100,000 monedas de oro Máscara Cambia tu cara aleatoriamente Máscara dorada Cambia tu cara a elección Gema de experiencia Sirve para subir de nivel el clan Gema de fundación Sirve para fundar un clan FastDrop Equipo full aleatorio Lingote de oro Lingote de oro Lingote de plata Lingote de plata Lingote de bronce Lingote de bronce Galera Elegante sombrero Resurgimiento divino Otorga el renacimiento a los integrantes del clan que se encuentren en el rango de visión Pociones azules Recupera maná Pociones Rojas Recupera vida Pociones Amarillas Aumenta agilidad Pociones Verdes Aumente fuerza Poción de invisibilidad Poción de invisibilidad, no gasta maná Cimitarra Cimitarra Item aleatorio Items coloridos aleatorios => Monedas de oro Obtienes hasta un máximo de 100,000 monedas de oro Alianza Necesario para casarse Válido por pantalón Podrás canjearlo por un pantalón Sacro Tus items no caerán Globo Un globo de cualquier color Galera Sombrero elegante Ropa de rey Túnica de rey Pociones azules Pociones azules Pociones rojas Pociones rojas Pociones amarillas Pociones amarillas Pociones verdes Pociones verdes FastDrop Equipo full aleatorio Talismán Necesario para combinar items Guantes de ladrón Aumenta entre 5% y 10% la recolección de oro Item aleatorio Item sorpresa Túnica del Ilusionista Orejas Mickey Mouse Sombrero de festival Escudo Gardnah Espada Akanus Cofre Ilusión Solo dropea cofre Sacro Tus items no caerán => Letra A Letra A Letra E Letra E Letra F Letra F Letra G Letra G Letra I Letra I Letra M Letra M Letra N Letra N Letra O Letra O Letra R Letra R Letra S Letra S Letra T Letra T Letra U Letra U *La probabilidad de dropeo de items en lso cofres puede ser de ninguno o todos. *Las llaves siempre abren los cofres, ya no se rompen.",
+    "tables": [
+        [
+            "| **Drop** |"
+        ],
+        [
+            "| **Descripción** |",
+            "| -------- |"
+        ],
+        [
+            "| --------------- |",
+            "| ![](images/cofre/510.bmp) |"
+        ],
+        [
+            "| Obtienes hasta un máximo de 100,000 |",
+            "| ![](images/cofre/924.bmp) |"
+        ],
+        [
+            "| Aumenta un 10% la experiencia adquirida |",
+            "| ![](images/potas/3.png) |"
+        ],
+        [
+            "| Recupera maná |",
+            "| ![](images/potas/4.png) |"
+        ],
+        [
+            "| Recupera vida |",
+            "| ![](images/potas/1.png) |"
+        ],
+        [
+            "| Aumenta agilidad |",
+            "| ![](images/potas/2.png) |"
+        ],
+        [
+            "| Aumenta fuerza |",
+            "| ![](images/cofre/2742.bmp) |"
+        ],
+        [
+            "| Cambia el color de la palabra de tus hechizos |",
+            "| ![](images/itemsfaps/potainvi.jpeg) |"
+        ],
+        [
+            "| Poción de invisibilidad, no gasta maná |",
+            "| ![](images/cofre/3551.bmp) |"
+        ],
+        [
+            "| El amor es FúriusAO |",
+            "| ![](images/itemsfaps/4.jpg) |"
+        ],
+        [
+            "| Cambia tu cara aleatoriamente |",
+            "| ![](images/cofre/617.bmp) |"
+        ],
+        [
+            "| Portal para ir de ciudad a ciudad |",
+            "| ![](images/cofre/fastpala.png) |"
+        ],
+        [
+            "| Equipo full aleatorio |",
+            "| ![](images/cofre/signo.png) |"
+        ],
+        [
+            "| Items coloridos aleatorios |"
+        ],
+        [
+            "| **Drop** |"
+        ],
+        [
+            "| **Descripción** |",
+            "| -------- |"
+        ],
+        [
+            "| --------------- |",
+            "| ![](images/cofre/510.bmp) |"
+        ],
+        [
+            "| Obtienes hasta un máximo de 100,000 monedas de oro |",
+            "| ![](images/itemsfaps/4.jpg) |"
+        ],
+        [
+            "| Cambia tu cara aleatoriamente |",
+            "| ![](images/itemsfaps/4D.bmp) |"
+        ],
+        [
+            "| Cambia tu cara a elección |",
+            "| ![](images/clanes/gemaclanlvlup.png) |"
+        ],
+        [
+            "| Sirve para subir de nivel el clan |",
+            "| ![](images/clanes/celeste.jpg) |"
+        ],
+        [
+            "| Sirve para fundar un clan |",
+            "| ![](images/cofre/fastpala.png) |"
+        ],
+        [
+            "| Equipo full aleatorio |",
+            "| ![](images/cofre/30.png) |"
+        ],
+        [
+            "| Lingote de oro |",
+            "| ![](images/cofre/32.png) |"
+        ],
+        [
+            "| Lingote de plata |",
+            "| ![](images/cofre/31.png) |"
+        ],
+        [
+            "| Lingote de bronce |",
+            "| ![](images/itemsfaps/20.png) |"
+        ],
+        [
+            "| Elegante sombrero |",
+            "| ![](images/itemsfaps/2742.png) |"
+        ],
+        [
+            "| Otorga el renacimiento a los integrantes del clan que se encuentren en el rango de visión |",
+            "| ![](images/potas/3.png) |"
+        ],
+        [
+            "| Recupera maná |",
+            "| ![](images/potas/4.png) |"
+        ],
+        [
+            "| Recupera vida |",
+            "| ![](images/potas/1.png) |"
+        ],
+        [
+            "| Aumenta agilidad |",
+            "| ![](images/potas/2.png) |"
+        ],
+        [
+            "| Aumente fuerza |",
+            "| ![](images/itemsfaps/potainvi.jpeg) |"
+        ],
+        [
+            "| Poción de invisibilidad, no gasta maná |",
+            "| ![](images/armitas/121.png) |"
+        ],
+        [
+            "| Cimitarra |",
+            "| ![](images/cofre/signo.png) |"
+        ],
+        [
+            "| Items coloridos aleatorios |"
+        ],
+        [
+            "| **Drop** |"
+        ],
+        [
+            "| **Descripción** |",
+            "| -------- |"
+        ],
+        [
+            "| --------------- |",
+            "| ![](images/cofre/510.bmp) |"
+        ],
+        [
+            "| Obtienes hasta un máximo de 100,000 monedas de oro |",
+            "| ![](images/itemsfaps/1.png) |"
+        ],
+        [
+            "| Necesario para casarse |",
+            "| ![](images/cofre/hombreeo.png) |"
+        ],
+        [
+            "| Podrás canjearlo por un pantalón |",
+            "| ![](images/itemsfaps/2738.png) |"
+        ],
+        [
+            "| Tus items no caerán |",
+            "| ![](images/itemsfaps/15.png) |"
+        ],
+        [
+            "| Un globo de cualquier color |",
+            "| ![](images/itemsfaps/20.png) |"
+        ],
+        [
+            "| Sombrero elegante |",
+            "| ![](images/itemsfaps/10.png) |"
+        ],
+        [
+            "| Túnica de rey |",
+            "| ![](images/potas/3.png) |"
+        ],
+        [
+            "| Pociones azules |",
+            "| ![](images/potas/4.png) |"
+        ],
+        [
+            "| Pociones rojas |",
+            "| ![](images/potas/1.png) |"
+        ],
+        [
+            "| Pociones amarillas |",
+            "| ![](images/potas/2.png) |"
+        ],
+        [
+            "| Pociones verdes |",
+            "| ![](images/cofre/fastpala.png) |"
+        ],
+        [
+            "| Equipo full aleatorio |",
+            "| ![](images/cofre/talisman.bmp) |"
+        ],
+        [
+            "| Necesario para combinar items |",
+            "| ![](images/cofre/999.bmp) |"
+        ],
+        [
+            "| Aumenta entre 5% y 10% la recolección de oro |",
+            "| ![](images/cofre/signo.png) |"
+        ],
+        [
+            "| Item sorpresa |"
+        ],
+        [
+            "| **Drop** |"
+        ],
+        [
+            "| **Descripción** |",
+            "| -------- |"
+        ],
+        [
+            "| --------------- |",
+            "| ![](images/cofre/4510.png) |"
+        ],
+        [
+            "| - |",
+            "| ![](images/cofre/2361.png) |"
+        ],
+        [
+            "| - |",
+            "| ![](images/cofre/2367.png) |"
+        ],
+        [
+            "| - |",
+            "| ![](images/cofre/3501.png) |"
+        ],
+        [
+            "| - |",
+            "| ![](images/cofre/2402.png) |"
+        ],
+        [
+            "| - |",
+            "| ![](images/cofre/16372.png) |"
+        ],
+        [
+            "| Solo dropea cofre |",
+            "| ![](images/itemsfaps/2738.png) |"
+        ],
+        [
+            "| Tus items no caerán |"
+        ],
+        [
+            "| **Drop** |"
+        ],
+        [
+            "| **Descripción** |",
+            "| -------- |"
+        ],
+        [
+            "| --------------- |",
+            "| ![](images/cofre/16120.bmp) |"
+        ],
+        [
+            "| Letra A |",
+            "| ![](images/cofre/16121.bmp) |"
+        ],
+        [
+            "| Letra E |",
+            "| ![](images/cofre/16122.bmp) |"
+        ],
+        [
+            "| Letra F |",
+            "| ![](images/cofre/16123.bmp) |"
+        ],
+        [
+            "| Letra G |",
+            "| ![](images/cofre/16124.bmp) |"
+        ],
+        [
+            "| Letra I |",
+            "| ![](images/cofre/16125.bmp) |"
+        ],
+        [
+            "| Letra M |",
+            "| ![](images/cofre/16126.bmp) |"
+        ],
+        [
+            "| Letra N |",
+            "| ![](images/cofre/16134.bmp) |"
+        ],
+        [
+            "| Letra O |",
+            "| ![](images/cofre/16127.bmp) |"
+        ],
+        [
+            "| Letra R |",
+            "| ![](images/cofre/16128.bmp) |"
+        ],
+        [
+            "| Letra S |",
+            "| ![](images/cofre/16129.bmp) |"
+        ],
+        [
+            "| Letra T |",
+            "| ![](images/cofre/16130.bmp) |"
+        ],
+        [
+            "| Letra U |"
+        ]
+    ]
+}

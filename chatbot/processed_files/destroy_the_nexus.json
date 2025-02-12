@@ -1,0 +1,14 @@
+{
+    "Destroy the Nexus": "Este evento faccionario consiste en matar al NPC de la facción enemiga antes de que maten al NPC propio. Los mismos poseen 60.000 de vida. La cantidad de participantes puede variar según la situación y consideración del Game Master organizador y la presencia o no de líderes faccionarios. Al morir los participantes son dirigidos a una base donde podrán resucitarse y reequiparse, y luego volver a la zona de combate.",
+    "tables": [
+        [
+            "| **Nexus Ciudadano** |"
+        ],
+        [
+            "| ---- |"
+        ],
+        [
+            "| ![](images/nexus/ciudadano.png) |"
+        ]
+    ]
+}

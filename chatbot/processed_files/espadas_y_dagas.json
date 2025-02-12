@@ -1,0 +1,248 @@
+{
+    "Espadas y Dagas": "Daga 1/3 20 Todas. 10 (Apuñala) Daga +1 2/3 1000 Todas, excepto mago, nigromante y druida. 20 (Apuñala) Daga +2 3/5 4000 Todas, excepto mago, nigromante y druida. 35 (Apuñala) Daga +3 4/6 La fabrican los [herreros](/herrero). Asesino, Bardo, Clérigo. 50 (Apuñala) Daga +4 5/8 La fabrican los [herreros](/herrero). Asesino y Bardo. Humanos, enanos y gnomos 70 (Apuñala) Daga templaria 6/9 La fabrican los [herreros](/herrero). Bardo (Elfo Oscuro/Elfo). 80 (Apuñala) Daga infernal 7/9 La fabrican los [herreros](/herrero). Asesino (Elfo y Elfo oscuro). 87 (Apuñala) Horquilla 1/5 150 Todas, excepto mago, nigromante y druida. 15 Martillo de guerra 4/8 1350 Todas, excepto mago, nigromante y druida. 15 Espada Vikinga 4/12 3400 Todas, excepto mago, nigromante y druida. 15 Garrote 1/4 350 Todas, excepto mago, nigromante y druida. 0 Espada larga 1/8 350 Todas, excepto mago, nigromante y druida. 10 Hacha 2/10 500 Carpintero, Arquero, Cazador, Clérigo, Guerrero, Herrero, Leñador, Sastre, Minero, Paladín, Pescador, Pirata, Principiantes. 20 Hacha larga de guerra 3/12 2000 Asesino, Carpintero, Arquero, Cazador, Clérigo, Guerrero, Herrero, Leñador, Sastre, Minero, Paladín, Pescador, Bardo, Pirata, Principiantes. 25 Sable 5/12 5000 Asesino, Carpintero, Arquero, Cazador, Clérigo, Guerrero, Herrero, Leñador, Sastre, Minero, Paladín, Pescador, Bardo, Pirata. 37 Hacha de bárbaro 4/15 10000 Clérigo, Guerrero, Paladín. 37 Hacha de doble filo 5/17 La fabrican los [herreros](/herrero). Clérigo, Guerrero, Paladín y Pirata. 60 Cimitarra 8/14 La fabrican los [herreros](/herrero). Carpintero, Clérigo, Guerrero, Herrero, Leñador, Sastre, Minero, Pescador, Bardo. 55 Katana 6/19 La fabrican los [herreros](/herrero). Druida, Asesino, Paladín. 60 Espada bastarda 10/17 La fabrican los [herreros](/herrero). Clérigo, Guerrero, Paladín. 65 Espada Pirata 14/18 La fabrican los [herreros](/herrero). Pirata. 87 Espada de plata 13/17 La fabrican los [herreros](/herrero). Clerigo, Guerrero, Paladin. 70 Espada de plata +1 15/18 La fabrican los [herreros](/herrero). Clerigo, Guerrero, Paladin. 83 Espada neithan 18/20 La fabrican los [herreros](/herrero). Guerrero, Paladin. 97 Espada neithan +1 18/22 La fabrican los [herreros](/herrero). Guerrero (Enano). 100",
+    "tables": [
+        [
+            "| **Imagen** |"
+        ],
+        [
+            "| **Ataque** |"
+        ],
+        [
+            "| **Clases permitidas** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| ![Archivo:10fe4.png](images/armitas/10fe4.png) |"
+        ],
+        [
+            "| 1/3 |"
+        ],
+        [
+            "| Todas. |"
+        ],
+        [
+            "| ![Archivo:105.png](images/armitas/105.png) |"
+        ],
+        [
+            "| 2/3 |"
+        ],
+        [
+            "| Todas, excepto mago, nigromante y druida. |"
+        ],
+        [
+            "| ![Archivo:106.png](images/armitas/106.png) |"
+        ],
+        [
+            "| 3/5 |"
+        ],
+        [
+            "| Todas, excepto mago, nigromante y druida. |"
+        ],
+        [
+            "| ![Archivo:10a7.png](images/armitas/10a7.png) |"
+        ],
+        [
+            "| 4/6 |"
+        ],
+        [
+            "| Asesino, Bardo, Clérigo. |"
+        ],
+        [
+            "| ![Archivo:106.png](images/armitas/1040.jpg) |"
+        ],
+        [
+            "| 5/8 |"
+        ],
+        [
+            "| Asesino y Bardo.  <br>Humanos, enanos y gnomos |"
+        ],
+        [
+            "| ![Archivo:124.png](images/armitas/124.png) |"
+        ],
+        [
+            "| 6/9 |"
+        ],
+        [
+            "| Bardo (Elfo Oscuro/Elfo). |"
+        ],
+        [
+            "| ![Archivo:125l.jpg](images/armitas/125l.jpg) |"
+        ],
+        [
+            "| 7/9 |"
+        ],
+        [
+            "| Asesino (Elfo y Elfo oscuro). |"
+        ],
+        [
+            "| ![](images/armitas/111.png) |"
+        ],
+        [
+            "| 1/5 |"
+        ],
+        [
+            "| Todas, excepto mago, nigromante y druida. |"
+        ],
+        [
+            "| ![](images/armitas/115.png) |"
+        ],
+        [
+            "| 4/8 |"
+        ],
+        [
+            "| Todas, excepto mago, nigromante y druida. |"
+        ],
+        [
+            "| ![](images/armitas/116.png) |"
+        ],
+        [
+            "| 4/12 |"
+        ],
+        [
+            "| Todas, excepto mago, nigromante y druida. |"
+        ],
+        [
+            "| ![Archivo:110.png](images/armitas/110.png) |"
+        ],
+        [
+            "| 1/4 |"
+        ],
+        [
+            "| Todas, excepto mago, nigromante y druida. |"
+        ],
+        [
+            "| ![Archivo:112.png](images/armitas/112.png) |"
+        ],
+        [
+            "| 1/8 |"
+        ],
+        [
+            "| Todas, excepto mago, nigromante y druida. |"
+        ],
+        [
+            "| ![Archivo:113.png](images/armitas/113.png) |"
+        ],
+        [
+            "| 2/10 |"
+        ],
+        [
+            "| Carpintero, Arquero, Cazador, Clérigo, Guerrero, Herrero, Leñador, Sastre, Minero, Paladín, Pescador, Pirata, Principiantes. |"
+        ],
+        [
+            "| ![Archivo:114.png](images/armitas/114.png) |"
+        ],
+        [
+            "| 3/12 |"
+        ],
+        [
+            "| Asesino, Carpintero, Arquero, Cazador, Clérigo, Guerrero, Herrero, Leñador, Sastre, Minero, Paladín, Pescador, Bardo, Pirata, Principiantes. |"
+        ],
+        [
+            "| ![Archivo:117.png](images/armitas/117.png) |"
+        ],
+        [
+            "| 5/12 |"
+        ],
+        [
+            "| Asesino, Carpintero, Arquero, Cazador, Clérigo, Guerrero, Herrero, Leñador, Sastre, Minero, Paladín, Pescador, Bardo, Pirata. |"
+        ],
+        [
+            "| ![Archivo:119.png](images/armitas/119.png) |"
+        ],
+        [
+            "| 4/15 |"
+        ],
+        [
+            "| Clérigo, Guerrero, Paladín. |"
+        ],
+        [
+            "| ![Archivo:118.png](images/armitas/118.png) |"
+        ],
+        [
+            "| 5/17 |"
+        ],
+        [
+            "| Clérigo, Guerrero, Paladín y Pirata. |"
+        ],
+        [
+            "| ![Archivo:121.png](images/armitas/121.png) |"
+        ],
+        [
+            "| 8/14 |"
+        ],
+        [
+            "| Carpintero, Clérigo, Guerrero, Herrero, Leñador, Sastre, Minero, Pescador, Bardo. |"
+        ],
+        [
+            "| ![Archivo:122.png](images/armitas/122.png) |"
+        ],
+        [
+            "| 6/19 |"
+        ],
+        [
+            "| Druida, Asesino, Paladín. |"
+        ],
+        [
+            "| ![Archivo:123.png](images/armitas/123.png) |"
+        ],
+        [
+            "| 10/17 |"
+        ],
+        [
+            "| Clérigo, Guerrero, Paladín. |"
+        ],
+        [
+            "| ![](images/trabajador/herrero/3679.png) |"
+        ],
+        [
+            "| 14/18 |"
+        ],
+        [
+            "| Pirata. |"
+        ],
+        [
+            "| ![Archivo:126.png](images/armitas/126.png) |"
+        ],
+        [
+            "| 13/17 |"
+        ],
+        [
+            "| Clerigo, Guerrero, Paladin. |"
+        ],
+        [
+            "| ![Archivo:plata1.png](images/armitas/Plata1.png) |"
+        ],
+        [
+            "| 15/18 |"
+        ],
+        [
+            "| Clerigo, Guerrero, Paladin. |"
+        ],
+        [
+            "| ![Archivo:127.png](images/armitas/127.png) |"
+        ],
+        [
+            "| 18/20 |"
+        ],
+        [
+            "| Guerrero, Paladin. |"
+        ],
+        [
+            "| ![Archivo:128.png](images/armitas/128.png) |"
+        ],
+        [
+            "| 18/22 |"
+        ],
+        [
+            "| Guerrero (Enano). |"
+        ]
+    ]
+}

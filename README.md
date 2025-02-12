@@ -23,8 +23,8 @@ El chatbot está contenido en el directorio `chatbot` y se ejecuta dentro de un 
 # Construir la imagen del chatbot
 docker-compose build
 
-# Levantar los contenedores
-docker-compose up -d
+# Levantar el contenedor
+docker-compose --env-file ./chatbot/.env up
 ```
 
 > ⚠️ **Nota**: Asegúrate de que Docker y Docker Compose estén instalados en tu sistema antes de ejecutar estos comandos.
@@ -50,7 +50,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Ejecutar el servicio del webhook
-python -m __main__
+python  __main__.py
 ```
 
 Con el Webhook ejecutando, se debe colocar su dirección en el repositorio que contenga los archivos .md que conforman la wiki.

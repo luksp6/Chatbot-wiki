@@ -34,9 +34,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar los archivos de la aplicación al contenedor
 COPY ./chatbot /app
 
-# Copiar .env al directorio de la aplicacion
-COPY .env /app
-
 # Cargar variables de entorno
 ARG LLM_NAME
 ENV LLM_NAME=${LLM_NAME}

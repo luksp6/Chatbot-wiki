@@ -1,0 +1,162 @@
+{
+    "Arquero": "Se especializa en combate con arcos. Los arqueros son seres de una gran agilidad, velocidad y puntería. Los que llegan a niveles avanzados pueden partir una nuez a varios metros de distancia con los ojos vendados. Por naturaleza, los arqueros son elfos, ya que ellos mismos inventaron el arte del arco y la flecha para defenderse de los orcos en tiempos remotos. Por eso mismo, sólo los elfos podrán utilizar el arco más poderoso disponible para esta clase, el \"Arco Élfico\", sería una mala idea ir en contra de esta regla natural. Pociones de Vitalidad 1000 pociones rojas que no caen al morir. Flechas mortales 1500 flechas comunes que no caen al morir. Vitalidad élfica Aumenta en 10 puntos la vida. Paso élfico Aumenta la evasion en un 5%. Ojo de águila Aumenta en 5% su puntería con arcos. Disparo élfico Aumenta el daño mínimo de las flechas en 5 puntos y el daño máximo en 3 puntos. Gorro Tizoc Todas Armadura Tizoc Altos Armadura Tizoc Bajos Arco de la marca Bajos Arco élfico Elfos Flechas + 2 Todas ALTOS BAJOS Evasión 1.05 Probabilidad de pegar cuerpo a cuerpo 0.75 Daño cuerpo a cuerpo 0.80 Probabilidad de pegar con arco y flecha 1.10 Daño con arco y flecha 1.05 Humano 10 138 de vida 258 de vida 308 de vida 358 de vida 408 de vida 450 de vida Elfo 9.5 132 de vida 246 de vida 294 de vida 341 de vida 389 de vida 436 de vida Enano 10.5 145 de vida 271 de vida 323 de vida 375 de vida 428 de vida 480 de vida *No se tiene en cuenta las recompensa de vida.",
+    "tables": [
+        [
+            "| **Nombre** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Pociones de Vitalidad |"
+        ],
+        [
+            "| Flechas mortales |"
+        ],
+        [
+            "| **Nombre** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Vitalidad élfica |"
+        ],
+        [
+            "| Paso élfico |"
+        ],
+        [
+            "| **Nombre** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Ojo de águila |"
+        ],
+        [
+            "| Disparo élfico |"
+        ],
+        [
+            "| **Imagen** |"
+        ],
+        [
+            "| **Raza** |",
+            "| --- |"
+        ],
+        [
+            "| --- |",
+            "| ![](images/luchador/arquero/285.png) |"
+        ],
+        [
+            "| Todas |",
+            "| ![](images/luchador/arquero/288.png) |"
+        ],
+        [
+            "| Altos |",
+            "| ![](images/luchador/arquero/287.png) |"
+        ],
+        [
+            "| Bajos |",
+            "| ![](images/luchador/arquero/42.png) |"
+        ],
+        [
+            "| Bajos |",
+            "| ![](images/luchador/arquero/44.png) |"
+        ],
+        [
+            "| Elfos |",
+            "| ![](images/arco/46.png) |"
+        ],
+        [
+            "| Todas |"
+        ],
+        [
+            "| ALTOS |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| ![](images/fulles/arqueh.png) |"
+        ],
+        [
+            "| Evasión |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Probabilidad de pegar cuerpo a cuerpo |"
+        ],
+        [
+            "| Daño cuerpo a cuerpo |"
+        ],
+        [
+            "| Probabilidad de pegar con arco y flecha |"
+        ],
+        [
+            "| Daño con arco y flecha |"
+        ],
+        [
+            "| **Raza** |"
+        ],
+        [
+            "| **Nivel 13** |"
+        ],
+        [
+            "| **Nivel 30** |"
+        ],
+        [
+            "| **Nivel 40** |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| --- |"
+        ],
+        [
+            "| Humano  <br>![](images/razas/cara_humano.png) |"
+        ],
+        [
+            "| 138 de vida |"
+        ],
+        [
+            "| 308 de vida |"
+        ],
+        [
+            "| 408 de vida |"
+        ],
+        [
+            "| Elfo  <br>![](images/razas/cara_elfo.png) |"
+        ],
+        [
+            "| 132 de vida |"
+        ],
+        [
+            "| 294 de vida |"
+        ],
+        [
+            "| 389 de vida |"
+        ],
+        [
+            "| Enano  <br>![](images/razas/cara_enano.png) |"
+        ],
+        [
+            "| 145 de vida |"
+        ],
+        [
+            "| 323 de vida |"
+        ],
+        [
+            "| 428 de vida |"
+        ]
+    ]
+}
