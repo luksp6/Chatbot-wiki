@@ -1,9 +1,10 @@
 from constants import load_environment_variables, DB_PATH, PORT, WEBHOOK_ROUTE
 from aux_classes import QueryRequest, GitHubWebhookData
-from model_handler import get_response
+from model_handler import get_response, init_model
 from data_handler import update_repo, update_vectors, rebuild_database
 
 from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
 import os
 import uvicorn
 from http.client import HTTPException
@@ -11,8 +12,8 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-# Iniciar FastAPI
 app = FastAPI()
+init_model()
 
 @app.get("/")
 def root():
@@ -24,9 +25,7 @@ def query_db(request: QueryRequest):
     if not os.path.exists(DB_PATH):
         raise HTTPException(status_code=500, detail="La base de datos no existe. Indexa los documentos primero.")
 
-    response = get_response(request)
-
-    return {"query": request.query, "results": response}
+    return StreamingResponse(get_response(request), media_type="text/plain")
 
 @app.post(WEBHOOK_ROUTE)
 def update_db(data: GitHubWebhookData):
@@ -36,6 +35,7 @@ def update_db(data: GitHubWebhookData):
         try:
             update_repo()
             update_vectors()
+            init_model()
             return {"status": "success", "message": "Repositorio y vectores actualizados."}
         except Exception as e:
             print(f"Error al actualizar: {e}")
@@ -48,6 +48,7 @@ def change_variables():
     try:
         load_environment_variables()
         rebuild_database()
+        init_model()
         return {"status": "success", "message": "Modelo recargado."}
     except Exception as e:
         print(f"Error al actualizar: {e}")

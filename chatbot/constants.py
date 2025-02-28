@@ -8,7 +8,7 @@ def load_environment_variables():
     """Carga las variables de entorno desde el archivo .env."""
     load_dotenv(ENV_PATH, override=True)  # Cargar las variables y sobrescribir las existentes
 
-    global REPO_NAME, GITHUB_TOKEN, REPO_OWNER, DB_PATH, COLLECTION_NAME, MODEL_NAME
+    global REPO_NAME, GITHUB_TOKEN, REPO_OWNER, DB_PATH, COLLECTION_NAME, MODEL_NAME, K, CHAIN_TYPE, TEMPERATURE, MAX_TOKENS
     global MAX_BATCH_SIZE, CHUNK_SIZE, CHUNK_OVERLAP, LLM_NAME, WEBHOOK_ROUTE, PORT, PROMPT
 
     REPO_NAME = os.getenv('REPO_NAME', 'FS-WIKI-prueba-')
@@ -17,6 +17,10 @@ def load_environment_variables():
     DB_PATH = os.getenv('DB_PATH', 'wiki_db')
     COLLECTION_NAME = os.getenv('COLLECTION_NAME', 'wiki_db')
     MODEL_NAME = os.getenv('MODEL_NAME', 'sentence-transformers/all-mpnet-base-v2')
+    K = int(os.getenv('K'))
+    CHAIN_TYPE = os.getenv('CHAIN_TYPE')
+    TEMPERATURE=float(os.getenv('TEMPERATURE'))
+    MAX_TOKENS= int(os.getenv('MAX_TOKENS'))
     MAX_BATCH_SIZE = int(os.getenv('MAX_BATCH_SIZE', 166))
     CHUNK_SIZE = int(os.getenv('CHUNK_SIZE', 1000))
     CHUNK_OVERLAP = int(os.getenv('CHUNK_OVERLAP', 500))
@@ -33,6 +37,5 @@ def load_environment_variables():
 
         Respuesta útil:
         """)
-
-# Cargar variables al inicio
+    
 load_environment_variables()

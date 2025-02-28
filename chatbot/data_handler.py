@@ -3,7 +3,6 @@ from constants import REPO_NAME, GITHUB_TOKEN, REPO_OWNER, DB_PATH, COLLECTION_N
 
 import os
 import subprocess
-import re
 import hashlib
 import json
 import chromadb.api
