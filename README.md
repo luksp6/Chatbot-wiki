@@ -21,7 +21,7 @@ El chatbot está contenido en el directorio `chatbot` y se ejecuta dentro de un 
 
 ```sh
 # Construir la imagen del chatbot
-docker-compose build
+docker-compose --env-file ./chatbot/.env build
 
 # Levantar el contenedor
 docker-compose --env-file ./chatbot/.env up

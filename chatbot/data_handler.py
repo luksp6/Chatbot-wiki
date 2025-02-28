@@ -46,85 +46,23 @@ def update_repo():
     # Configurar la URL remota por si cambia el token
     subprocess.run(["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], check=True)
 
-def load_markdown(filepath):
-    """Carga un archivo Markdown y retorna su contenido"""
+def load_json(filepath):
+    """Carga un archivo json y retorna su contenido"""
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
     return content
 
-def extract_title(md_content):
-    """Extrae el título del documento desde el YAML Front Matter o el primer encabezado."""
-    title = None
-    yaml_title_match = re.search(r"^title:\s*(.*)", md_content, re.MULTILINE)
-    if yaml_title_match:
-        title = yaml_title_match.group(1).strip()    
-    return title
-
-def extract_text(md_content):
-    """Extrae solo el texto principal del archivo Markdown sin formato adicional."""
-    # Eliminar metadatos YAML (encabezado del archivo Markdown)
-    md_content = re.sub(r"^---.*?---\s*", '', md_content, flags=re.DOTALL)
-    # Eliminar imagenes
-    text_content = re.sub(r'!\[.*?\]\(.*?\)', '', md_content)
-    # Eliminar encabezados de tablas
-    text_content = re.sub(r'\*\*.*?\*\*', '', text_content)
-     # Eliminar <br /> (etiqueta HTML de salto de línea)
-    text_content = re.sub(r'<br\s*/?>', '', text_content)    
-    # Eliminar #
-    text_content = re.sub(r'\#', '', text_content)    
-    # Eliminar |
-    text_content = re.sub(r'\|', '', text_content)
-    # Eliminar las ocurrencias de ---
-    text_content = re.sub(r'-', '', text_content)
-    # Limpiar espacios extras y saltos de línea innecesarios
-    text_content = re.sub(r'\n+', ' ', text_content)  # Reemplazar saltos de línea múltiples por un espacio
-    text_content = re.sub(r'\s{2,}', ' ', text_content)  # Reemplazar múltiples espacios por un solo espacio
-    # Eliminar espacios al inicio y al final
-    text_content = text_content.strip()
-    return text_content
-
-def extract_tables(md_content):
-    """Extrae las tablas en Markdown conservando su estructura."""
-    tables = []
-    matches = re.findall(r"(\|.*?\|(?:\n\|.*?\|)*)", md_content)
-    for match in matches:
-        rows = [row.strip() for row in match.split("\n") if row.strip()]
-        tables.append(rows)
-    return tables
-
-def process_markdown_to_json(filepath):
-    """Convierte un archivo Markdown a JSON estructurado."""
-    content = load_markdown(filepath)
-    title = extract_title(content)
-    main_text = extract_text(content)
-    tables = extract_tables(content)
-
-    # Construir el diccionario final
-    json_data = {
-        title: main_text,
-        "tables": tables
-    }
-
-    # Guardar el archivo JSON
-    os.makedirs("processed_files", exist_ok=True)
-    json_filename = os.path.splitext(os.path.basename(filepath))[0] + ".json"
-    json_filepath = os.path.join("processed_files", json_filename)
-    with open(json_filepath, 'w', encoding='utf-8') as f:
-        json.dump(json_data, f, indent=4, ensure_ascii=False)
-
-    return json_data
-
 def load_documents():
-    """Carga y preprocesa todos los documentos Markdown del repositorio con sus hashes."""
+    """Carga y preprocesa todos los documentos repositorio con sus hashes."""
     print("Cargando documentos...")
     repo_path = get_repo_path()
     documents = []
 
     for filename in os.listdir(repo_path):
-        if filename.endswith(".md"):
+        if filename.endswith(".json"):
             filepath = os.path.join(repo_path, filename)
             file_hash = get_file_hash(filepath)
-            content = json.dumps(process_markdown_to_json(filepath), ensure_ascii=False, indent=4)
+            content = json.dumps(load_json(filepath), ensure_ascii=False, indent=4)
             documents.append(Document(page_content=content, metadata={"source": filename, "hash": file_hash}))
 
     return documents
@@ -148,13 +86,15 @@ def update_vectors():
     # Archivos modificados o nuevos
     updated_documents = []
     modified_files = []
+    
+    repo_path = get_repo_path()
 
     for filename, file_hash in repo_docs.items():
         if filename not in existing_docs or existing_docs[filename] != file_hash:
             modified_files.append(filename)
-            filepath = os.path.join(get_repo_path(), filename)
-            text = load_documents(filepath)
-            updated_documents.append(Document(page_content=text, metadata={"source": filename, "hash": file_hash}))
+            filepath = os.path.join(repo_path, filename)
+            content = json.dumps(load_json(filepath), ensure_ascii=False, indent=4)
+            updated_documents.append(Document(page_content=content, metadata={"source": filename, "hash": file_hash}))
 
     # Eliminar las versiones antiguas de los archivos modificados antes de reindexarlos
     if modified_files:
