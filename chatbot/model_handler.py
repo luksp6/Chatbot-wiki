@@ -25,8 +25,13 @@ def get_response(request: QueryRequest):
             return_source_documents=True, 
             chain_type_kwargs={"prompt": prompt}
         )
-        for chunk in qa.stream({"query": request.query}):  
+        sources = set()
+        for chunk in qa.stream({"query": request.query}):
+            for doc in chunk.get("source_documents", []):
+                sources.add(doc.metadata.get("source", "Desconocido"))
             yield chunk["result"]
+        if sources:
+            yield f"\nFuentes: {', '.join(sources)}"
     except Exception as e:
         print(f"Error en la generación del stream: {e}")
         yield "Error interno en el servidor. Intenta de nuevo más tarde."
