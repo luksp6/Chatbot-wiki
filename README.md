@@ -61,7 +61,7 @@ Con el Webhook ejecutando, se debe colocar su dirección en el repositorio que c
 
 ## Variables de entorno
 
-El proyecto utiliza un archivo `.env` en el directorio raíz para gestionar variables de entorno. Asegúrate de configurarlas correctamente antes de ejecutar el chatbot y el webhook.
+El proyecto utiliza un archivo `.env` en el directorio `chatbot` para gestionar variables de entorno. Asegúrate de configurarlas correctamente antes de ejecutar el chatbot y el webhook.
 
 Ejemplo de `.env`:
 ```ini

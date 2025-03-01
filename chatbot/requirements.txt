@@ -48,8 +48,10 @@ jsonpatch==1.33
 jsonpointer==3.0.0
 kubernetes==32.0.0
 langchain==0.3.18
+langchain-chroma==0.2.2
 langchain-community==0.3.17
 langchain-core==0.3.34
+langchain-huggingface==0.1.2
 langchain-ollama==0.2.3
 langchain-text-splitters==0.3.6
 langsmith==0.3.7

@@ -6,9 +6,9 @@ import subprocess
 import hashlib
 import json
 import chromadb.api
-from langchain_community.vectorstores import Chroma
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.schema import Document
 import warnings
 warnings.filterwarnings("ignore")
@@ -48,8 +48,7 @@ def update_repo():
 def load_json(filepath):
     """Carga un archivo json y retorna su contenido"""
     with open(filepath, 'r', encoding='utf-8') as file:
-        content = file.read()
-    return content
+        return json.load(file)
 
 def load_documents():
     """Carga y preprocesa todos los documentos repositorio con sus hashes."""
@@ -62,6 +61,7 @@ def load_documents():
             filepath = os.path.join(repo_path, filename)
             file_hash = get_file_hash(filepath)
             content = json.dumps(load_json(filepath), ensure_ascii=False, indent=4)
+            #content = load_json(filepath)
             documents.append(Document(page_content=content, metadata={"source": filename, "hash": file_hash}))
 
     return documents
@@ -109,7 +109,6 @@ def update_vectors():
             db.add_documents(docs_chunked[i : i + MAX_BATCH_SIZE])
             print(f"Insertado batch {i // MAX_BATCH_SIZE + 1}/{(len(docs_chunked) // MAX_BATCH_SIZE) + 1}")
 
-    db.persist()
     print("Vectores actualizados correctamente.")
 
 def rebuild_database():
@@ -136,5 +135,4 @@ def rebuild_database():
         db.add_documents(docs_chunked[i : i + MAX_BATCH_SIZE])
         print(f"Insertado batch {i // MAX_BATCH_SIZE + 1}/{(len(docs_chunked) // MAX_BATCH_SIZE) + 1}")
 
-    db.persist()
     print(f"Base de datos reconstruida con {len(docs_chunked)} fragmentos.")

@@ -1,8 +1,8 @@
 from constants import DB_PATH, COLLECTION_NAME, LLM_NAME, MODEL_NAME, K, CHAIN_TYPE, TEMPERATURE, MAX_TOKENS, PROMPT
 from aux_classes import QueryRequest
 
-from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
 from langchain_ollama import OllamaLLM
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
