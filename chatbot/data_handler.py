@@ -1,21 +1,36 @@
-import shutil
 from constants import REPO_NAME, GITHUB_TOKEN, REPO_OWNER, DB_PATH, COLLECTION_NAME, EMBEDDING_NAME, MAX_BATCH_SIZE, CHUNK_SIZE, CHUNK_OVERLAP
 
+import shutil
 import os
 import subprocess
 import hashlib
 import json
-import chromadb.api
+import weaviate
+from weaviate.embedded import EmbeddedOptions
+from sentence_transformers import SentenceTransformer
 
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_chroma import Chroma
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.schema import Document
 import warnings
 warnings.filterwarnings("ignore")
 
-embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_NAME)
-db = Chroma(persist_directory=DB_PATH, embedding_function=embeddings, collection_name=COLLECTION_NAME)
+def init_db():
+    global db_client, embedding_model, schema
+    db_client = weaviate.Client(embedded_options=EmbeddedOptions())
+    embedding_model = SentenceTransformer(EMBEDDING_NAME)
+    schema = {
+        "classes": [{
+            "class": COLLECTION_NAME,
+            "vectorizer": "none",
+            "properties": [
+                {"name": "title", "dataType": ["text"]},
+                {"name": "content", "dataType": ["text"]},
+                {"name": "tables", "dataType": ["text[]"]},
+                {"name": "hash", "dataType": ["text"]},
+                {"name": "source", "dataType": ["text"]}
+            ]
+        }]
+    }
+    db_client.schema.delete_all()
+    db_client.schema.create(schema)
 
 def get_repo_path():
     """Devuelve la ruta local del repositorio."""
@@ -60,82 +75,46 @@ def load_documents():
     for filename in os.listdir(repo_path):
         if filename.endswith(".json"):
             filepath = os.path.join(repo_path, filename)
-            file_hash = get_file_hash(filepath)
-            content = json.dumps(load_json(filepath), ensure_ascii=False, indent=4)
-            #content = load_json(filepath)
-            documents.append(Document(page_content=content, metadata={"source": filename, "hash": file_hash}))
+            doc = load_json(filepath)
+            documents.append(doc)
 
     return documents
 
-def get_docs_chunked(documents):
-    return RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP).split_documents(documents)
-
 def update_vectors():
-    """Actualiza la base de datos vectorial en Chroma detectando archivos nuevos, eliminados y modificados."""
-    print("Actualizando vectores en Chroma...")
+    """Actualiza la base de datos detectando archivos nuevos, eliminados y modificados."""
+    print("Actualizando vectores en Weaviate...")
 
-    existing_docs = {metadata["source"]: metadata.get("hash", "") for metadata in db.get()["metadatas"]}
-    repo_docs = {doc.metadata["source"]: doc.metadata["hash"] for doc in load_documents()}
+    documents = load_documents()
 
-    # Archivos eliminados
-    deleted_files = set(existing_docs) - set(repo_docs)
+    existing_docs = {}
+    results = db_client.query.get(COLLECTION_NAME, ["source", "hash"]).do()
+    for doc in results.get("data", {}).get("Get", {}).get(COLLECTION_NAME, []):
+        existing_docs[doc["source"]] = doc["hash"]
+
+    deleted_files = set(existing_docs) - {doc["source"] for doc in documents}
     if deleted_files:
-        print(f"Eliminando {len(deleted_files)} documentos obsoletos...")
-        db.delete(list(deleted_files))
+        for source in deleted_files:
+            db_client.batch.delete_objects_by_filter(COLLECTION_NAME, f'source == "{source}"')
 
-    # Archivos modificados o nuevos
-    updated_documents = []
-    modified_files = []
-    
-    repo_path = get_repo_path()
-
-    for filename, file_hash in repo_docs.items():
-        if filename not in existing_docs or existing_docs[filename] != file_hash:
-            modified_files.append(filename)
-            filepath = os.path.join(repo_path, filename)
-            content = json.dumps(load_json(filepath), ensure_ascii=False, indent=4)
-            updated_documents.append(Document(page_content=content, metadata={"source": filename, "hash": file_hash}))
-
-    # Eliminar las versiones antiguas de los archivos modificados antes de reindexarlos
-    if modified_files:
-        print(f"Eliminando {len(modified_files)} documentos modificados antes de reindexarlos...")
-        for file in modified_files:
-            db.delete(where={"source": file})
-        print(f"{len(modified_files)} documentos obsoletos eliminados.")
-
-    # Reindexar archivos nuevos o modificados
-    if updated_documents:
-        print(f"Indexando {len(updated_documents)} documentos nuevos o modificados...")
-        docs_chunked = get_docs_chunked(updated_documents)
-
-        for i in range(0, len(docs_chunked), MAX_BATCH_SIZE):
-            db.add_documents(docs_chunked[i : i + MAX_BATCH_SIZE])
-            print(f"Insertado batch {i // MAX_BATCH_SIZE + 1}/{(len(docs_chunked) // MAX_BATCH_SIZE) + 1}")
+    with db_client.batch(batch_size=MAX_BATCH_SIZE) as batch:
+        for doc in documents:
+            if doc["source"] not in existing_docs or existing_docs[doc["source"]] != doc["hash"]:
+                embedding = embedding_model.encode(doc["title"] + " ".join(doc["content"] + " ".join(doc["tables"])))
+                
+                batch.add_data_object(
+                    properties=doc,
+                    vector=embedding.tolist(),
+                    class_name=COLLECTION_NAME
+                )
 
     print("Vectores actualizados correctamente.")
 
 def rebuild_database():
-    global db, embeddings
-    """Elimina y reconstruye completamente la base de datos de Chroma."""
-    print("Reconstruyendo base de datos desde cero...")
+    """Elimina y reconstruye completamente la base de datos."""
+    print("Reconstruyendo base de datos...")
 
-    chromadb.api.client.SharedSystemClient.clear_system_cache()
-    if os.path.exists(DB_PATH):
-        shutil.rmtree(DB_PATH)
-        print("Base de datos eliminada.")
-    
-    # Asegurarse de que el directorio de persistencia se crea nuevamente
-    os.makedirs(DB_PATH, exist_ok=True)
-    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_NAME)
-    db = Chroma(persist_directory=DB_PATH, embedding_function=embeddings, collection_name=COLLECTION_NAME)
+    db_client.schema.delete_all()
+    init_db()
+    update_vectors()
 
-    documents = load_documents()
-    if not documents:
-        print("No se encontraron documentos Markdown en el repositorio.")
-
-    docs_chunked = get_docs_chunked(documents)
-    for i in range(0, len(docs_chunked), MAX_BATCH_SIZE):
-        db.add_documents(docs_chunked[i : i + MAX_BATCH_SIZE])
-        print(f"Insertado batch {i // MAX_BATCH_SIZE + 1}/{(len(docs_chunked) // MAX_BATCH_SIZE) + 1}")
-
-    print(f"Base de datos reconstruida con {len(docs_chunked)} fragmentos.")
+    print(f"Base de datos reconstruida.")
