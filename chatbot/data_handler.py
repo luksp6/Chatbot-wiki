@@ -97,8 +97,10 @@ def update_vectors():
 
     # Eliminar las versiones antiguas de los archivos modificados antes de reindexarlos
     if modified_files:
-        print(f"🔄 Eliminando {len(modified_files)} archivos modificados antes de reindexarlos...")
-        db.delete(modified_files)
+        print(f"Eliminando {len(modified_files)} documentos modificados antes de reindexarlos...")
+        for file in modified_files:
+            db.delete(where={"source": file})
+        print(f"{len(modified_files)} documentos obsoletos eliminados.")
 
     # Reindexar archivos nuevos o modificados
     if updated_documents:
