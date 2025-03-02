@@ -1,5 +1,5 @@
 import shutil
-from constants import REPO_NAME, GITHUB_TOKEN, REPO_OWNER, DB_PATH, COLLECTION_NAME, MODEL_NAME, MAX_BATCH_SIZE, CHUNK_SIZE, CHUNK_OVERLAP
+from constants import REPO_NAME, GITHUB_TOKEN, REPO_OWNER, DB_PATH, COLLECTION_NAME, EMBEDDING_NAME, MAX_BATCH_SIZE, CHUNK_SIZE, CHUNK_OVERLAP
 
 import os
 import subprocess
@@ -14,7 +14,7 @@ from langchain.schema import Document
 import warnings
 warnings.filterwarnings("ignore")
 
-embeddings = HuggingFaceEmbeddings(model_name=MODEL_NAME)
+embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_NAME)
 db = Chroma(persist_directory=DB_PATH, embedding_function=embeddings, collection_name=COLLECTION_NAME)
 
 def get_repo_path():
@@ -126,7 +126,7 @@ def rebuild_database():
     
     # Asegurarse de que el directorio de persistencia se crea nuevamente
     os.makedirs(DB_PATH, exist_ok=True)
-    embeddings = HuggingFaceEmbeddings(model_name=MODEL_NAME)
+    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_NAME)
     db = Chroma(persist_directory=DB_PATH, embedding_function=embeddings, collection_name=COLLECTION_NAME)
 
     documents = load_documents()

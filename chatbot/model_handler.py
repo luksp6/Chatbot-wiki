@@ -1,4 +1,4 @@
-from constants import DB_PATH, COLLECTION_NAME, LLM_NAME, MODEL_NAME, K, CHAIN_TYPE, TEMPERATURE, MAX_TOKENS, PROMPT
+from constants import DB_PATH, COLLECTION_NAME, LLM_NAME, K, CHAIN_TYPE, TEMPERATURE, MAX_TOKENS, PROMPT
 from aux_classes import QueryRequest
 from data_handler import embeddings
 
