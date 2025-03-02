@@ -6,6 +6,7 @@ import subprocess
 import hashlib
 import json
 import chromadb.api
+
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -114,7 +115,7 @@ def update_vectors():
     print("Vectores actualizados correctamente.")
 
 def rebuild_database():
-    global db
+    global db, embeddings
     """Elimina y reconstruye completamente la base de datos de Chroma."""
     print("Reconstruyendo base de datos desde cero...")
 
