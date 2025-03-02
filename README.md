@@ -65,13 +65,23 @@ El proyecto utiliza un archivo `.env` en el directorio `chatbot` para gestionar 
 
 Ejemplo de `.env`:
 ```ini
-CHATBOT_URL=http://localhost
+REPO_NAME=nombre_de_tu_repositorio_de_datos
+GITHUB_TOKEN=_tu_token
+REPO_OWNER=_dueño_del_repositorio
+DB_PATH=directorio_de_persistencia
+COLLECTION_NAME=nombre_para_la_coleccion
+MODEL_NAME=sentence-transformers/all-mpnet-base-v2
+K=5
+CHAIN_TYPE=stuff
+TEMPERATURE=1.5
+MAX_TOKENS=200
+LLM_NAME=llama3.2
+MAX_BATCH_SIZE=166
 CHATBOT_PORT=6000
-WEBHOOK_PORT=5000
 WEBHOOK_ROUTE=/update-db
-REPO_NAME=FS-WIKI-prueba-
-GITHUB_TOKEN=tu_token_de_github
-REPO_OWNER=luksp6
+CHUNK_SIZE=1000
+CHUNK_OVERLAP=500
+PROMPT=tu_prompt
 ```
 
 Las variables REPO_NAME, GITHUB_TOKEN y REPO_OWNER deben actualizarse con los datos del repositorio de producción de la wiki. 
