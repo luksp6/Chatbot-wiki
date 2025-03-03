@@ -1,8 +1,7 @@
-from constants import COLLECTION_NAME, LLM_NAME, K, CHAIN_TYPE, TEMPERATURE, MAX_TOKENS, PROMPT
+from constants import LLM_NAME, K, CHAIN_TYPE, TEMPERATURE, MAX_TOKENS, PROMPT
 from aux_classes import QueryRequest
-from data_handler import db_client, embedding_model
+from data_handler import weaviate_retriever
 
-import weaviate
 from langchain_ollama import OllamaLLM
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
@@ -10,23 +9,6 @@ from langchain.chains import RetrievalQA
 def init_model():
     global LLM
     LLM = OllamaLLM(model=LLM_NAME, streaming=True, temperature=TEMPERATURE, max_tokens=MAX_TOKENS)
-
-def weaviate_retriever(query, top_k=K):
-    query_embedding = embedding_model.encode(query)
-
-    results = db_client.query.get(COLLECTION_NAME, ["title", "content", "source"]) \
-        .with_near_vector(query_embedding.tolist()) \
-        .with_limit(top_k) \
-        .do()
-
-    retrieved_docs = []
-    for doc in results.get("data", {}).get("Get", {}).get(COLLECTION_NAME, []):
-        retrieved_docs.append({
-            "page_content": doc["content"],
-            "metadata": {"source": doc["source"]}
-        })
-    
-    return retrieved_docs
 
 def get_response(request: QueryRequest):
     try:

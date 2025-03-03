@@ -1,36 +1,31 @@
-from constants import REPO_NAME, GITHUB_TOKEN, REPO_OWNER, DB_PATH, COLLECTION_NAME, EMBEDDING_NAME, MAX_BATCH_SIZE, CHUNK_SIZE, CHUNK_OVERLAP
+from constants import REPO_NAME, GITHUB_TOKEN, REPO_OWNER, COLLECTION_NAME, EMBEDDING_NAME, MAX_BATCH_SIZE, K, LLM_NAME
 
-import shutil
 import os
 import subprocess
 import hashlib
 import json
 import weaviate
-from weaviate.embedded import EmbeddedOptions
+from weaviate.classes.config import Configure
 from sentence_transformers import SentenceTransformer
 
 import warnings
 warnings.filterwarnings("ignore")
 
 def init_db():
-    global db_client, embedding_model, schema
-    db_client = weaviate.Client(embedded_options=EmbeddedOptions())
+    global db_client, embedding_model
+    print("Conectando a Weaviate...")
+
+    # Usamos el nombre del servicio "weaviate" en lugar de "localhost"
+    db_client = weaviate.connect_to_local()  
+
+    # Modelo de embeddings
     embedding_model = SentenceTransformer(EMBEDDING_NAME)
-    schema = {
-        "classes": [{
-            "class": COLLECTION_NAME,
-            "vectorizer": "none",
-            "properties": [
-                {"name": "title", "dataType": ["text"]},
-                {"name": "content", "dataType": ["text"]},
-                {"name": "tables", "dataType": ["text[]"]},
-                {"name": "hash", "dataType": ["text"]},
-                {"name": "source", "dataType": ["text"]}
-            ]
-        }]
-    }
-    db_client.schema.delete_all()
-    db_client.schema.create(schema)
+
+    # Definir esquema de Weaviate
+    db_client.collections.create(
+        name=COLLECTION_NAME,
+        vectorizer_config=Configure.Vectorizer.text2vec_openai(),  # Cambia según tu configuración
+    )
 
 def get_repo_path():
     """Devuelve la ruta local del repositorio."""
@@ -118,3 +113,20 @@ def rebuild_database():
     update_vectors()
 
     print(f"Base de datos reconstruida.")
+
+def weaviate_retriever(query, top_k=K):
+    query_embedding = embedding_model.encode(query)
+
+    results = db_client.query.get(COLLECTION_NAME, ["title", "content", "source"]) \
+        .with_near_vector(query_embedding.tolist()) \
+        .with_limit(top_k) \
+        .do()
+
+    retrieved_docs = []
+    for doc in results.get("data", {}).get("Get", {}).get(COLLECTION_NAME, []):
+        retrieved_docs.append({
+            "page_content": doc["content"],
+            "metadata": {"source": doc["source"]}
+        })
+    
+    return retrieved_docs
