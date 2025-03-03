@@ -1,7 +1,8 @@
 from constants import load_environment_variables, DB_PATH, PORT, WEBHOOK_ROUTE
 from aux_classes import QueryRequest, GitHubWebhookData
-from model_handler import get_response, init_model
-from data_handler import update_repo, update_vectors, rebuild_database
+from data_handler import update_repo
+from db_handler import init_db, update_vectors, rebuild_database
+from model_handler import init_model, get_response
 
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
@@ -13,6 +14,7 @@ warnings.filterwarnings("ignore")
 
 
 app = FastAPI()
+init_db()
 init_model()
 
 @app.get("/")
@@ -46,7 +48,8 @@ def update_db(data: GitHubWebhookData):
 def change_variables():
     print("Variables de entorno del modelo modificadas. Actualizando...")
     try:
-        load_environment_variables()
+        load_environment_variables()        
+        update_repo()
         rebuild_database()
         init_model()
         return {"status": "success", "message": "Modelo recargado."}

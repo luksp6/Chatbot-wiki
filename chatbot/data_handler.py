@@ -1,21 +1,12 @@
-import shutil
-from constants import REPO_NAME, GITHUB_TOKEN, REPO_OWNER, DB_PATH, COLLECTION_NAME, EMBEDDING_NAME, MAX_BATCH_SIZE, CHUNK_SIZE, CHUNK_OVERLAP
+from constants import REPO_NAME, GITHUB_TOKEN, REPO_OWNER
 
 import os
 import subprocess
 import hashlib
-import json
-import chromadb.api
-
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_chroma import Chroma
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+import re
+import pdfplumber
+from markdown_pdf import MarkdownPdf, Section
 from langchain.schema import Document
-import warnings
-warnings.filterwarnings("ignore")
-
-embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_NAME)
-db = Chroma(persist_directory=DB_PATH, embedding_function=embeddings, collection_name=COLLECTION_NAME)
 
 def get_repo_path():
     """Devuelve la ruta local del repositorio."""
@@ -46,96 +37,60 @@ def update_repo():
     # Configurar la URL remota por si cambia el token
     subprocess.run(["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], check=True)
 
-def load_json(filepath):
+def load_md(filepath):
     """Carga un archivo json y retorna su contenido"""
     with open(filepath, 'r', encoding='utf-8') as file:
-        return json.load(file)
+        return file.read()
 
-def load_documents():
-    """Carga y preprocesa todos los documentos repositorio con sus hashes."""
-    print("Cargando documentos...")
+def extract_title(md_content):
+    title_match = re.search(r"title:\s*(.+)", md_content)
+    title = title_match.group(1) if title_match else "Título Desconocido"
+    return title
+
+def parse_to_pdf(filename, md_content):
+    extract_title(md_content)
+    pdf = MarkdownPdf()
+    pdf.meta["title"] = extract_title(md_content)
+    pdf.add_section(Section(md_content, toc=False))
+    pdf.save(os.path.splitext(filename)[0] + ".pdf")
+    return pdf
+
+def pdf_to_text(pdf):
+    text = ""
+    for page in pdf.pages:
+        text += page.extract_text()
+    return text
+
+def process_repo_files(process_content=False, selected_files=None):
+    """
+    Recorre el repositorio y devuelve un diccionario con nombres de archivos y sus hashes.
+    Si process_content=True, también devuelve el contenido procesado de los archivos.
+    """
     repo_path = get_repo_path()
+    repo_docs = {}
     documents = []
 
-    for filename in os.listdir(repo_path):
-        if filename.endswith(".json"):
+    if selected_files is None:
+        selected_files = os.listdir(repo_path)
+
+    for filename in selected_files:
+        if filename.endswith(".md"):
             filepath = os.path.join(repo_path, filename)
             file_hash = get_file_hash(filepath)
-            content = json.dumps(load_json(filepath), ensure_ascii=False, indent=4)
-            #content = load_json(filepath)
-            documents.append(Document(page_content=content, metadata={"source": filename, "hash": file_hash}))
+            repo_docs[filename] = file_hash  # Guardamos el nombre del archivo y su hash
 
+            if process_content:  # Solo procesamos contenido si es necesario
+                content = parse_to_pdf(filename, load_md(filepath))
+                content = pdf_to_text(content)
+                documents.append(Document(page_content=content, metadata={"source": filename, "hash": file_hash}))
+
+    return (repo_docs, documents) if process_content else repo_docs
+
+
+def load_documents(files=None):
+    print("Cargando documentos...")
+    _, documents = process_repo_files(process_content=True, selected_files=files)
     return documents
 
-def get_docs_chunked(documents):
-    return RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP).split_documents(documents)
-
-def update_vectors():
-    """Actualiza la base de datos vectorial en Chroma detectando archivos nuevos, eliminados y modificados."""
-    print("Actualizando vectores en Chroma...")
-
-    existing_docs = {metadata["source"]: metadata.get("hash", "") for metadata in db.get()["metadatas"]}
-    repo_docs = {doc.metadata["source"]: doc.metadata["hash"] for doc in load_documents()}
-
-    # Archivos eliminados
-    deleted_files = set(existing_docs) - set(repo_docs)
-    if deleted_files:
-        print(f"Eliminando {len(deleted_files)} documentos obsoletos...")
-        db.delete(list(deleted_files))
-
-    # Archivos modificados o nuevos
-    updated_documents = []
-    modified_files = []
-    
-    repo_path = get_repo_path()
-
-    for filename, file_hash in repo_docs.items():
-        if filename not in existing_docs or existing_docs[filename] != file_hash:
-            modified_files.append(filename)
-            filepath = os.path.join(repo_path, filename)
-            content = json.dumps(load_json(filepath), ensure_ascii=False, indent=4)
-            updated_documents.append(Document(page_content=content, metadata={"source": filename, "hash": file_hash}))
-
-    # Eliminar las versiones antiguas de los archivos modificados antes de reindexarlos
-    if modified_files:
-        print(f"Eliminando {len(modified_files)} documentos modificados antes de reindexarlos...")
-        for file in modified_files:
-            db.delete(where={"source": file})
-        print(f"{len(modified_files)} documentos obsoletos eliminados.")
-
-    # Reindexar archivos nuevos o modificados
-    if updated_documents:
-        print(f"Indexando {len(updated_documents)} documentos nuevos o modificados...")
-        docs_chunked = get_docs_chunked(updated_documents)
-
-        for i in range(0, len(docs_chunked), MAX_BATCH_SIZE):
-            db.add_documents(docs_chunked[i : i + MAX_BATCH_SIZE])
-            print(f"Insertado batch {i // MAX_BATCH_SIZE + 1}/{(len(docs_chunked) // MAX_BATCH_SIZE) + 1}")
-
-    print("Vectores actualizados correctamente.")
-
-def rebuild_database():
-    global db, embeddings
-    """Elimina y reconstruye completamente la base de datos de Chroma."""
-    print("Reconstruyendo base de datos desde cero...")
-
-    chromadb.api.client.SharedSystemClient.clear_system_cache()
-    if os.path.exists(DB_PATH):
-        shutil.rmtree(DB_PATH)
-        print("Base de datos eliminada.")
-    
-    # Asegurarse de que el directorio de persistencia se crea nuevamente
-    os.makedirs(DB_PATH, exist_ok=True)
-    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_NAME)
-    db = Chroma(persist_directory=DB_PATH, embedding_function=embeddings, collection_name=COLLECTION_NAME)
-
-    documents = load_documents()
-    if not documents:
-        print("No se encontraron documentos Markdown en el repositorio.")
-
-    docs_chunked = get_docs_chunked(documents)
-    for i in range(0, len(docs_chunked), MAX_BATCH_SIZE):
-        db.add_documents(docs_chunked[i : i + MAX_BATCH_SIZE])
-        print(f"Insertado batch {i // MAX_BATCH_SIZE + 1}/{(len(docs_chunked) // MAX_BATCH_SIZE) + 1}")
-
-    print(f"Base de datos reconstruida con {len(docs_chunked)} fragmentos.")
+def get_repo_docs():
+    return process_repo_files(process_content=False)
