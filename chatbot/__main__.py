@@ -47,6 +47,7 @@ def change_variables():
     print("Variables de entorno del modelo modificadas. Actualizando...")
     try:
         load_environment_variables()
+        update_repo()
         rebuild_database()
         init_model()
         return {"status": "success", "message": "Modelo recargado."}
