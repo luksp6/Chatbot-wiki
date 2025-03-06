@@ -27,3 +27,21 @@ services:
       - ./chatbot/.env
     volumes:
       - ./chatbot:/app  # Monta el código de tu proyecto en el contenedor
+      - ./chatbot/main.py:/app/main.py
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  weaviate_data:
+  caddy_data:
+  caddy_config:

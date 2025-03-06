@@ -6,6 +6,7 @@ from data_handler import update_repo, update_vectors, rebuild_database
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 import os
+import multiprocessing
 import uvicorn
 from http.client import HTTPException
 import warnings
@@ -55,5 +56,10 @@ def change_variables():
         print(f"Error al actualizar: {e}")
         return {"status": "error", "message": str(e)}, 500
 
+
+def start():
+    workers = multiprocessing.cpu_count() * 2 + 1
+    uvicorn.run("main:app", host="0.0.0.0", port=PORT, workers=4)
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=PORT)
+    start()
