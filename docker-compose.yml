@@ -8,6 +8,7 @@ services:
         - REPO_OWNER=${REPO_OWNER}
         - REPO_NAME=${REPO_NAME}
         - CHATBOT_PORT=${CHATBOT_PORT}
+        - WORKERS=${WORKERS}
     ports:
       - "${CHATBOT_PORT}:${CHATBOT_PORT}"
     environment:
@@ -23,25 +24,10 @@ services:
       - CHUNK_SIZE=${CHUNK_SIZE}
       - CHUNK_OVERLAP=${CHUNK_OVERLAP}
       - PROMPT=${PROMPT}
+      - WORKERS=${WORKERS}
     env_file:
       - ./chatbot/.env
     volumes:
       - ./chatbot:/app  # Monta el código de tu proyecto en el contenedor
       - ./chatbot/main.py:/app/main.py
     restart: unless-stopped
-
-  caddy:
-    image: caddy:latest
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-
-volumes:
-  weaviate_data:
-  caddy_data:
-  caddy_config:

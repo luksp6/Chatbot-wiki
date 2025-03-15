@@ -65,6 +65,7 @@ El proyecto utiliza un archivo `.env` en el directorio `chatbot` para gestionar 
 
 Ejemplo de `.env`:
 ```ini
+WORKERS=4
 REPO_NAME=nombre_de_tu_repositorio_de_datos
 GITHUB_TOKEN=_tu_token
 REPO_OWNER=_dueño_del_repositorio
