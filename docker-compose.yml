@@ -30,4 +30,19 @@ services:
     volumes:
       - ./chatbot:/app  # Monta el código de tu proyecto en el contenedor
       - ./chatbot/main.py:/app/main.py
+    depends_on:
+      - redis  # Asegura que Redis se inicie antes que el chatbot
     restart: unless-stopped
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 20 1 --loglevel warning
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+    driver: local
