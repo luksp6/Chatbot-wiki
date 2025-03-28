@@ -7,15 +7,8 @@ from http.client import HTTPException
 import warnings
 warnings.filterwarnings("ignore")
 
-const = Constants_manager()
 app = FastAPI()
-docs = Documents_manager()
-db = DB_manager()
-llm = LLM_manager()
-
-const.add_observer(docs)
-const.add_observer(db)
-const.add_observer(llm)
+chatbot = Chatbot()
 
 @app.get("/")
 def root():
@@ -24,10 +17,10 @@ def root():
 @app.post("/query")
 def query_db(request: QueryRequest):
     # Verificar si la base de datos vectorial existe
-    if not db.exists():
+    if not chatbot.db.exists():
         raise HTTPException(status_code=500, detail="La base de datos no existe. Indexa los documentos primero.")
 
-    return StreamingResponse(llm.get_response(request), media_type="text/plain")
+    return StreamingResponse(chatbot.chat(request), media_type="text/plain")
 
 @app.post(WEBHOOK_ROUTE)
 def update_db(data: GitHubWebhookData):
@@ -35,9 +28,7 @@ def update_db(data: GitHubWebhookData):
     if data.ref == "refs/heads/main":
         print("Cambio detectado en la rama principal. Actualizando...")
         try:
-            docs.update_repo()
-            db.update_vectors()
-            llm.start()
+            chatbot.update_documents()
             return {"status": "success", "message": "Repositorio y vectores actualizados."}
         except Exception as e:
             print(f"Error al actualizar: {e}")
@@ -48,11 +39,7 @@ def update_db(data: GitHubWebhookData):
 def change_variables():
     print("Variables de entorno del modelo modificadas. Actualizando...")
     try:
-        load_environment_variables()
-        docs.update_repo()
-        db.delete_database()
-        db.build_database()
-        llm.start()
+        chatbot.reload()
         return {"status": "success", "message": "Modelo recargado."}
     except Exception as e:
         print(f"Error al actualizar: {e}")

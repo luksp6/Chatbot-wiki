@@ -1,5 +1,4 @@
 import shutil
-from constants import DB_PATH, COLLECTION_NAME, EMBEDDING_NAME, MAX_BATCH_SIZE
 
 import os
 import subprocess
@@ -28,10 +27,11 @@ class DB_manager(Singleton, Observer):
         self._build_database()
 
     def connect(self):
+        const = Constants_manager()
         if self._db is None:
-                    self._persist_dir = DB_PATH
-                    self._collection_name = COLLECTION_NAME
-                    self._embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_NAME)
+                    self._persist_dir = const.DB_PATH
+                    self._collection_name = const.COLLECTION_NAME
+                    self._embeddings = HuggingFaceEmbeddings(model_name=const.EMBEDDING_NAME)
                     self._db = Chroma(persist_directory=self._persist_dir, embedding_function=self._embeddings, collection_name=self._collection_name)
     
     def __init__(self):
@@ -43,10 +43,10 @@ class DB_manager(Singleton, Observer):
     def exists():
         return os.path.exists(self._persist_dir)
 
-    def delete_vector(self, delete_query):
-        self._db.delete(delete_query)
+    def delete(self, delete_query):
+        self._db.delete(where=delete_query)
 
-    def add_vector(self, add_query):
+    def add(self, add_query):
         self._db.add_documents(add_query)
 
     def update_vectors(self):
@@ -61,7 +61,7 @@ class DB_manager(Singleton, Observer):
         deleted_files = set(existing_docs) - set(repo_docs)
         if deleted_files:
             print(f"Eliminando {len(deleted_files)} documentos obsoletos...")
-            self.delete_vector(list(deleted_files))
+            self.delete(list(deleted_files))
 
         # Archivos modificados o nuevos
         updated_documents = []
@@ -76,17 +76,15 @@ class DB_manager(Singleton, Observer):
         if modified_files:
             print(f"Eliminando {len(modified_files)} documentos modificados antes de reindexarlos...")
             for file in modified_files:
-                self.delete_vector(where={"source": file})
+                self.delete({"source": file})
             print(f"{len(modified_files)} documentos obsoletos eliminados.")
-
+        
+        const = Constants_manager()
         # Reindexar archivos nuevos o modificados
         if updated_documents:
             print(f"Indexando {len(updated_documents)} documentos nuevos o modificados...")
             docs_chunked = doc_manager.get_docs_chunked(updated_documents)
-
-            for i in range(0, len(docs_chunked), MAX_BATCH_SIZE):
-                self.add_vector(docs_chunked[i : i + MAX_BATCH_SIZE])
-                print(f"Insertado batch {i // MAX_BATCH_SIZE + 1}/{(len(docs_chunked) // MAX_BATCH_SIZE) + 1}")
+            self.batched_insert(docs_chunked)
 
         print("Vectores actualizados correctamente.")
 
@@ -96,8 +94,10 @@ class DB_manager(Singleton, Observer):
         self._db = None
         self._embeddings = None
         chromadb.api.client.SharedSystemClient.clear_system_cache()
-        if os.path.exists(DB_PATH):
-            shutil.rmtree(DB_PATH)
+
+        const = Constants_manager()
+        if os.path.exists(cont.DB_PATH):
+            shutil.rmtree(const.DB_PATH)
             print("Base de datos eliminada.")
         else:
             print("La base de datos no existe.")
@@ -105,17 +105,21 @@ class DB_manager(Singleton, Observer):
     def _build_database(self):
     """Construye completamente la base de datos de Chroma."""
         print("Construyendo base de datos desde cero...")
+        const = Constants_manager()
 
         # Asegurarse de que el directorio de persistencia se crea nuevamente
-        os.makedirs(DB_PATH, exist_ok=True)
+        os.makedirs(const.DB_PATH, exist_ok=True)
         self.connect()
 
         doc_manager = Documents_manager()
         documents = doc_manager.load_documents()
 
         docs_chunked = doc_manager.get_docs_chunked(documents)
-        for i in range(0, len(docs_chunked), MAX_BATCH_SIZE):
-            self._db.add_vector(docs_chunked[i : i + MAX_BATCH_SIZE])
-            print(f"Insertado batch {i // MAX_BATCH_SIZE + 1}/{(len(docs_chunked) // MAX_BATCH_SIZE) + 1}")
+        self.batched_insert(docs_chunked)
 
         print(f"Base de datos construida con {len(docs_chunked)} fragmentos.")
+
+    def batched_insert(self, documents):
+        for i in range(0, len(documents), const.MAX_BATCH_SIZE):
+            self._db.add(documents[i : i + const.MAX_BATCH_SIZE])
+            print(f"Insertado batch {i // const.MAX_BATCH_SIZE + 1}/{(len(documents) // const.MAX_BATCH_SIZE) + 1}")
