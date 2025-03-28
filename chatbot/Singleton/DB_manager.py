@@ -22,9 +22,12 @@ class DB_manager(Singleton, Observer):
     _persist_dir = None
     _collection_name = None
 
-    def notify(self):
-        self._delete_database()
-        self._build_database()
+    def __init__(self):
+        self.connect()
+
+    async def notify(self):
+        await self._delete_database()
+        await self._build_database()
 
     def connect(self):
         const = Constants_manager()
@@ -33,9 +36,6 @@ class DB_manager(Singleton, Observer):
                     self._collection_name = const.COLLECTION_NAME
                     self._embeddings = HuggingFaceEmbeddings(model_name=const.EMBEDDING_NAME)
                     self._db = Chroma(persist_directory=self._persist_dir, embedding_function=self._embeddings, collection_name=self._collection_name)
-    
-    def __init__(self):
-        self.connect()
 
     def get_retriever(self, k):
         return self._db.as_retriever(search_kwargs={'k': k})
@@ -88,7 +88,7 @@ class DB_manager(Singleton, Observer):
 
         print("Vectores actualizados correctamente.")
 
-    def _delete_database(self):
+    async def _delete_database(self):
     """Elimina completamente la base de datos de Chroma."""
         print("Reconstruyendo base de datos desde cero...")
         self._db = None
@@ -97,12 +97,12 @@ class DB_manager(Singleton, Observer):
 
         const = Constants_manager()
         if os.path.exists(cont.DB_PATH):
-            shutil.rmtree(const.DB_PATH)
+            await asyncio.to_thread(shutil.rmtree, const.DB_PATH)
             print("Base de datos eliminada.")
         else:
             print("La base de datos no existe.")
 
-    def _build_database(self):
+    async def _build_database(self):
     """Construye completamente la base de datos de Chroma."""
         print("Construyendo base de datos desde cero...")
         const = Constants_manager()
@@ -112,10 +112,10 @@ class DB_manager(Singleton, Observer):
         self.connect()
 
         doc_manager = Documents_manager()
-        documents = doc_manager.load_documents()
+        documents = await asyncio.to_thread(doc_manager.load_documents)
 
-        docs_chunked = doc_manager.get_docs_chunked(documents)
-        self.batched_insert(docs_chunked)
+        docs_chunked = await asyncio.to_thread(doc_manager.get_docs_chunked, documents)
+        await asyncio.to_thread(self.batched_insert, docs_chunked)
 
         print(f"Base de datos construida con {len(docs_chunked)} fragmentos.")
 

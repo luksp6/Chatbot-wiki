@@ -1,9 +1,10 @@
-from constants import LLM_NAME, K, CHAIN_TYPE, TEMPERATURE, MAX_TOKENS, PROMPT
 from aux_classes import QueryRequest
 
 from langchain_ollama import OllamaLLM
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
+
+import asyncio
 
 class LLM_manager(Singleton, Observer):
 {
@@ -11,23 +12,25 @@ class LLM_manager(Singleton, Observer):
     _retriever = None
     _prompt = None
 
-    def notify(self):
-        self.start()
+    async def notify(self):
+        await self.start()
 
-    def start(self):
+    async def start(self):
         db_manager = DB_manager()
-        self._llm = OllamaLLM(model=LLM_NAME, streaming=True, temperature=TEMPERATURE, max_tokens=MAX_TOKENS)
-        self._retriever = db_manager.get_retriever(K)
-        self._prompt = PromptTemplate(template=PROMPT, input_variables=['context', 'question'])
+        const = Constants_manager()
+        self._llm = OllamaLLM(model=const.LLM_NAME, streaming=True, temperature=const.TEMPERATURE, max_tokens=const.MAX_TOKENS)
+        self._retriever = await asyncio.to_thread(db_manager.get_retriever, K)
+        self._prompt = PromptTemplate(template=const.PROMPT, input_variables=['context', 'question'])
 
     def __init__(self):
         self.start()
 
-    def get_response(self, request: QueryRequest)
+    async def get_response(self, request: QueryRequest)
         try:
+            const = Constants_manager()
             qa = RetrievalQA.from_chain_type(
                 llm=self._llm, 
-                chain_type=CHAIN_TYPE, 
+                chain_type=const.CHAIN_TYPE, 
                 retriever=self._retriever, 
                 return_source_documents=True,
                 chain_type_kwargs={"prompt": self._prompt}
