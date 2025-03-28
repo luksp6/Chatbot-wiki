@@ -46,7 +46,7 @@ class Documents_manager(Singleton, Observer):
             await loop.run_in_executor(executor, subprocess.run, ["git", "clone", repo_url, repo_path], {"check": True})
         else:
             print(f"El directorio {repo_path} ya existe. Haciendo pull...")
-            subprocess.run(["git", "-C", repo_path, "pull"], check=True)await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "pull"], {"check": True})
+            await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "pull"], {"check": True})
 
         # Configurar la URL remota por si cambia el token
         await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], {"check": True})

@@ -1,12 +1,6 @@
-import shutil
-
 import os
-import subprocess
-import hashlib
-import json
 import chromadb.api
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
 
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma

@@ -8,13 +8,21 @@ class Chatbot(Singleton):
         self.const = Constants_manager()
         self.docs = Documents_manager()
         self.db = DB_manager()
+        self.cache = Cache_manager()
         self.llm = LLM_manager()
         self.const.add_observer(self.docs)
         self.const.add_observer(self.db)
         self.const.add_observer(self.llm)
 
     async def chat(self, request: QueryRequest):
-        return await self.llm.get_response(request)
+        cache_key = f"chat:{hash(request.query)}"
+        cached_response = await redis_manager.get_cache(cache_key)
+        if cached_response:
+            return cached_response
+
+        response = await self.llm.get_response(request)
+        await redis_manager.set_cache(cache_key, response)  # Guardar en caché
+        return response
 
     async def update_documents(self):
         await asyncio.to_thread(self.docs.update_repo)

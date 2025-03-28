@@ -35,5 +35,6 @@ class Constants_manager(Singleton, Observable):
 
             Respuesta útil:
             """)
+        self.REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
         self.notify_observers()
 }
