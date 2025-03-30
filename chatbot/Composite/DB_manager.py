@@ -7,7 +7,7 @@ import os
 import chromadb.api
 import asyncio
 
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
@@ -34,7 +34,7 @@ class DB_manager(Singleton, Observer, Service):
             self._persist_dir = const.DB_PATH
             self._collection_name = const.COLLECTION_NAME
             self._embeddings = await asyncio.to_thread(
-                lambda: HuggingFaceEmbeddings(model_name=const.EMBEDDING_NAME)
+                lambda: HuggingFaceEmbeddings(model_name=const.EMBEDDING_NAME, show_progress=True)
             )
             self._service = await asyncio.to_thread(
                 lambda: Chroma(

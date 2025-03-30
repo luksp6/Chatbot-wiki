@@ -29,7 +29,7 @@ class Cache_manager(Singleton, Observer, Compound_service):
             db = DB_manager()
             self._service = RedisSemanticCache(
                 redis_url=const.REDIS_URL,
-                embeddings=db.get_embeddings(),
+                embeddings= db.get_embeddings(),
                 distance_threshold=const.CACHE_THRESHOLD,
                 ttl=const.CACHE_TTL
             )
