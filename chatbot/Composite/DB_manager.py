@@ -1,3 +1,8 @@
+from Singleton.Singleton import Singleton
+from Singleton.Constants_manager import Constants_manager
+from Observer.Observer import Observer
+from Composite.Service import Service
+
 import os
 import chromadb.api
 import asyncio
@@ -6,56 +11,72 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
-import warnings
-warnings.filterwarnings("ignore")
 
-class DB_manager(Singleton, Observer):
-
-    _db = None
-    _embeddings = None
-    _persist_dir = None
-    _collection_name = None
+class DB_manager(Singleton, Observer, Service):
 
     def __init__(self):
-        self.connect()
+        """Inicializa la base de datos y la conexión a Chroma."""
+        Service.__init__(self)
+        self._embeddings = None
+        self._persist_dir = None
+        self._collection_name = None
 
     async def notify(self):
+        await self.disconnect()
         await self._delete_database()
+        await self.connect()
+        await self.wait_for_connection()
         await self._build_database()
 
-    def connect(self):
-        const = Constants_manager()
-        if self._db is None:
-                    self._persist_dir = const.DB_PATH
-                    self._collection_name = const.COLLECTION_NAME
-                    self._embeddings = HuggingFaceEmbeddings(model_name=const.EMBEDDING_NAME)
-                    self._db = Chroma(persist_directory=self._persist_dir, embedding_function=self._embeddings, collection_name=self._collection_name)
+    async def _connect(self):
+        if self._service is None:
+            const = Constants_manager()
+            self._persist_dir = const.DB_PATH
+            self._collection_name = const.COLLECTION_NAME
+            self._embeddings = await asyncio.to_thread(
+                lambda: HuggingFaceEmbeddings(model_name=const.EMBEDDING_NAME)
+            )
+            self._service = await asyncio.to_thread(
+                lambda: Chroma(
+                    persist_directory=self._persist_dir,
+                    embedding_function=self._embeddings,
+                    collection_name=self._collection_name
+                )
+            )
+            self._connected.set()
+
+    async def _disconnect(self):
+        """Desconecta la base de datos liberando los recursos."""
+        if self._service:
+            self._service = None
+            self._embeddings = None
+            self._connected.clear()
 
     def get_retriever(self, k):
-        return self._db.as_retriever(search_kwargs={'k': k})
+        return self._service.as_retriever(search_kwargs={'k': k})
+
+    def get_embeddings(self):
+        return self._embeddings
 
     def exists():
         return os.path.exists(self._persist_dir)
 
-    def delete(self, delete_query):
-        self._db.delete(where=delete_query)
-
     def add(self, add_query):
-        self._db.add_documents(add_query)
+        self._service.add_documents(add_query)
 
     def update_vectors(self):
-    """Actualiza la base de datos vectorial en Chroma detectando archivos nuevos, eliminados y modificados."""
+        """Actualiza la base de datos vectorial en Chroma detectando archivos nuevos, eliminados y modificados."""
         print("Actualizando vectores en Chroma...")
 
         doc_manager = Documents_manager()
-        existing_docs = {metadata["source"]: metadata.get("hash", "") for metadata in self._db.get()["metadatas"]}
+        existing_docs = {metadata["source"]: metadata.get("hash", "") for metadata in self._service.get()["metadatas"]}
         repo_docs = {doc.metadata["source"]: doc.metadata["hash"] for doc in doc_manager.load_documents()}
 
         # Archivos eliminados
         deleted_files = set(existing_docs) - set(repo_docs)
         if deleted_files:
             print(f"Eliminando {len(deleted_files)} documentos obsoletos...")
-            self.delete(list(deleted_files))
+            self._service.delete(list(deleted_files))
 
         # Archivos modificados o nuevos
         updated_documents = []
@@ -70,7 +91,7 @@ class DB_manager(Singleton, Observer):
         if modified_files:
             print(f"Eliminando {len(modified_files)} documentos modificados antes de reindexarlos...")
             for file in modified_files:
-                self.delete({"source": file})
+                self._service.delete(where={"source": file})
             print(f"{len(modified_files)} documentos obsoletos eliminados.")
         
         const = Constants_manager()
@@ -83,37 +104,33 @@ class DB_manager(Singleton, Observer):
         print("Vectores actualizados correctamente.")
 
     async def _delete_database(self):
-    """Elimina completamente la base de datos de Chroma."""
-        print("Reconstruyendo base de datos desde cero...")
-        self._db = None
-        self._embeddings = None
-        chromadb.api.client.SharedSystemClient.clear_system_cache()
+        """Elimina completamente la base de datos de Chroma."""
+        print("Eliminando base de datos...")
 
         const = Constants_manager()
-        if os.path.exists(cont.DB_PATH):
+        if os.path.exists(const.DB_PATH):
             await asyncio.to_thread(shutil.rmtree, const.DB_PATH)
             print("Base de datos eliminada.")
         else:
             print("La base de datos no existe.")
 
     async def _build_database(self):
-    """Construye completamente la base de datos de Chroma."""
-        print("Construyendo base de datos desde cero...")
+        """Construye completamente la base de datos de Chroma."""
+        print("Construyendo base de datos...")
         const = Constants_manager()
 
         # Asegurarse de que el directorio de persistencia se crea nuevamente
         os.makedirs(const.DB_PATH, exist_ok=True)
-        self.connect()
 
         doc_manager = Documents_manager()
         documents = await asyncio.to_thread(doc_manager.load_documents)
 
         docs_chunked = await asyncio.to_thread(doc_manager.get_docs_chunked, documents)
-        await asyncio.to_thread(self.batched_insert, docs_chunked)
+        asyncio.to_thread(self.batched_insert, docs_chunked)
 
         print(f"Base de datos construida con {len(docs_chunked)} fragmentos.")
 
     def batched_insert(self, documents):
         for i in range(0, len(documents), const.MAX_BATCH_SIZE):
-            self._db.add(documents[i : i + const.MAX_BATCH_SIZE])
+            self._service.add(documents[i : i + const.MAX_BATCH_SIZE])
             print(f"Insertado batch {i // const.MAX_BATCH_SIZE + 1}/{(len(documents) // const.MAX_BATCH_SIZE) + 1}")

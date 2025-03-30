@@ -1,19 +1,26 @@
 from aux_classes import QueryRequest, GitHubWebhookData
+from Singleton.Constants_manager import Constants_manager
+from Facade.Chatbot import Chatbot
 
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
-import os
 from http.client import HTTPException
-import asyncio
 import warnings
 warnings.filterwarnings("ignore")
 
+const = Constants_manager()
 app = FastAPI()
 chatbot = Chatbot()
+
+@app.on_event("startup")
+async def startup_event():
+    await chatbot.init_services()
+
 
 @app.get("/")
 async def root():
     return {"message": "Servidor del Chatbot activo 🚀"}
+
 
 @app.post("/query")
 async def query_db(request: QueryRequest):
@@ -23,7 +30,8 @@ async def query_db(request: QueryRequest):
 
     return StreamingResponse(await chatbot.chat(request), media_type="text/plain")
 
-@app.post(WEBHOOK_ROUTE)
+
+@app.post(const.WEBHOOK_ROUTE)
 async def update_db(data: GitHubWebhookData):
     """Maneja los eventos del webhook de GitHub."""
     if data.ref == "refs/heads/main":
@@ -36,11 +44,12 @@ async def update_db(data: GitHubWebhookData):
             return {"status": "error", "message": str(e)}, 500
     return {"status": "ignored", "message": "Evento no relevante."}
 
+
 @app.get("/change-model-variables")
-async def change_variables():
+def change_variables():
     print("Variables de entorno del modelo modificadas. Actualizando...")
     try:
-        await chatbot.reload()
+        chatbot.reload()
         return {"status": "success", "message": "Modelo recargado."}
     except Exception as e:
         print(f"Error al actualizar: {e}")

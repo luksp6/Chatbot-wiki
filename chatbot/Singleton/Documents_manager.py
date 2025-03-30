@@ -1,17 +1,18 @@
-import shutil
-from constants import REPO_NAME, GITHUB_TOKEN, REPO_OWNER, MAX_BATCH_SIZE, CHUNK_SIZE, CHUNK_OVERLAP
+from Singleton.Singleton import Singleton
+from Observer.Observer import Observer
 
+import shutil
 import os
 import subprocess
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
+import warnings
+warnings.filterwarnings("ignore")
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
-import warnings
-warnings.filterwarnings("ignore")
 
 class Documents_manager(Singleton, Observer):
 
@@ -19,19 +20,19 @@ class Documents_manager(Singleton, Observer):
         await self.update_repo()
 
     def _get_repo_path(self):
-    """Devuelve la ruta local del repositorio."""
+        """Devuelve la ruta local del repositorio."""
         const = Constants_manager()
         return os.path.join(os.getcwd(), const.REPO_NAME)
 
     def _get_file_hash(self, filepath):
-    """Calcula un hash MD5 del contenido de un archivo."""
+        """Calcula un hash MD5 del contenido de un archivo."""
         hasher = hashlib.md5()
         with open(filepath, 'rb') as f:
             hasher.update(f.read())
         return hasher.hexdigest()
 
     async def update_repo(self):
-    """Actualiza el repositorio local con los últimos cambios de GitHub."""
+        """Actualiza el repositorio local con los últimos cambios de GitHub."""
         print("Actualizando el repositorio desde GitHub...")
 
         const = Constants_manager()
@@ -52,12 +53,12 @@ class Documents_manager(Singleton, Observer):
         await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], {"check": True})
 
     def _open_json(self, filepath):
-    """Carga un archivo json y retorna su contenido"""
+        """Carga un archivo json y retorna su contenido"""
         with open(filepath, 'r', encoding='utf-8') as file:
             return json.load(file)
 
     def load_documents(self):
-    """Carga y preprocesa todos los documentos repositorio con sus hashes."""
+        """Carga y preprocesa todos los documentos repositorio con sus hashes."""
         print("Cargando documentos...")
         documents = []
         for filename in self._get_repo_path():
