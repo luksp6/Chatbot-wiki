@@ -6,3 +6,7 @@ class Singleton:
             cls._instances[cls] = super().__new__(cls)
             
         return cls._instances[cls]
+
+    @staticmethod
+    def get_instance(cls):
+        return cls._instances[cls]

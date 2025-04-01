@@ -1,6 +1,8 @@
-from aux_classes import QueryRequest, GitHubWebhookData
-from Singleton.Constants_manager import Constants_manager
-from Facade.Chatbot import Chatbot
+from utils.aux_classes import QueryRequest, GitHubWebhookData
+
+from concrete.Constants_manager import Constants_manager
+
+from concrete.Facade.Chatbot import Chatbot
 
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
@@ -14,7 +16,7 @@ chatbot = Chatbot()
 
 @app.on_event("startup")
 async def startup_event():
-    await chatbot.init_services()
+    await chatbot.start()
 
 
 @app.get("/")

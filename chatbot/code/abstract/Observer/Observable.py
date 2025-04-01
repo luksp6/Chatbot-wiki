@@ -1,4 +1,4 @@
-from Observer.Observer import Observer
+from abstract.Observer.Observer import Observer
 
 class Observable:
     

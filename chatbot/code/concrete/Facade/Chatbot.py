@@ -1,10 +1,12 @@
-from aux_classes import QueryRequest
-from Singleton.Singleton import Singleton
-from Singleton.Constants_manager import Constants_manager
-from Singleton.Documents_manager import Documents_manager
-from Composite.Cache_manager import Cache_manager
-from Composite.DB_manager import DB_manager
-from Composite.LLM_manager import LLM_manager
+from utils.aux_classes import QueryRequest
+
+from abstract.Singleton.Singleton import Singleton
+
+from concrete.Constants_manager import Constants_manager
+from concrete.Documents_manager import Documents_manager
+from concrete.Cache_manager import Cache_manager
+from concrete.DB_manager import DB_manager
+from concrete.LLM_manager import LLM_manager
 
 import asyncio
 
@@ -30,6 +32,9 @@ class Chatbot(Singleton):
         const.add_observer(self.cache)
         const.add_observer(self.llm)
 
+    async def start(self):
+        await self.docs.update_repo()
+        await self.init_services()
 
     async def init_services(self):
         for service in self._services:

@@ -1,7 +1,8 @@
-from Singleton.Singleton import Singleton
-from Singleton.Constants_manager import Constants_manager
-from Observer.Observer import Observer
-from Composite.Service import Service
+from abstract.Singleton.Singleton import Singleton
+from abstract.Observer.Observer import Observer
+from abstract.Composite.Service import Service
+
+from concrete.Constants_manager import Constants_manager
 
 import os
 import chromadb.api
@@ -30,8 +31,8 @@ class DB_manager(Singleton, Observer, Service):
 
     async def _connect(self):
         if self._service is None:
-            const = Constants_manager()
-            self._persist_dir = const.DB_PATH
+            const = Constants_manager.get_instance(Constants_manager)
+            self._persist_dir = os.path.join(os.getcwd(), const.RESOURCES_PATH, const.DB_PATH)
             self._collection_name = const.COLLECTION_NAME
             self._embeddings = await asyncio.to_thread(
                 lambda: HuggingFaceEmbeddings(model_name=const.EMBEDDING_NAME, show_progress=True)
@@ -68,7 +69,7 @@ class DB_manager(Singleton, Observer, Service):
         """Actualiza la base de datos vectorial en Chroma detectando archivos nuevos, eliminados y modificados."""
         print("Actualizando vectores en Chroma...")
 
-        doc_manager = Documents_manager()
+        doc_manager = Documents_manager.get_instance(Documents_manager)
         existing_docs = {metadata["source"]: metadata.get("hash", "") for metadata in self._service.get()["metadatas"]}
         repo_docs = {doc.metadata["source"]: doc.metadata["hash"] for doc in doc_manager.load_documents()}
 
@@ -107,9 +108,9 @@ class DB_manager(Singleton, Observer, Service):
         """Elimina completamente la base de datos de Chroma."""
         print("Eliminando base de datos...")
 
-        const = Constants_manager()
-        if os.path.exists(const.DB_PATH):
-            await asyncio.to_thread(shutil.rmtree, const.DB_PATH)
+        const = Constants_manager.get_instance(Constants_manager)
+        if self.exists():
+            await asyncio.to_thread(shutil.rmtree, self._persist_dir)
             print("Base de datos eliminada.")
         else:
             print("La base de datos no existe.")
@@ -117,12 +118,12 @@ class DB_manager(Singleton, Observer, Service):
     async def _build_database(self):
         """Construye completamente la base de datos de Chroma."""
         print("Construyendo base de datos...")
-        const = Constants_manager()
+        const = Constants_manager.get_instance(Constants_manager)
 
         # Asegurarse de que el directorio de persistencia se crea nuevamente
         os.makedirs(const.DB_PATH, exist_ok=True)
 
-        doc_manager = Documents_manager()
+        doc_manager = Documents_manager.get_instance(Documents_manager)
         documents = await asyncio.to_thread(doc_manager.load_documents)
 
         docs_chunked = await asyncio.to_thread(doc_manager.get_docs_chunked, documents)

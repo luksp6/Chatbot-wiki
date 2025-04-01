@@ -1,5 +1,5 @@
-from Singleton.Singleton import Singleton
-from Observer.Observable import Observable
+from abstract.Singleton.Singleton import Singleton
+from abstract.Observer.Observable import Observable
 
 import os
 
@@ -17,6 +17,7 @@ class Constants_manager(Singleton, Observable):
         if os.path.exists(self._env_path):
             load_dotenv(self._env_path, override=True)
 
+        self.RESOURCES_PATH = os.getenv('RESOURCES_PATH', 'Resources')
         self.REPO_NAME = os.getenv('REPO_NAME', 'FS-WIKI-JSON')
         self.GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
         self.REPO_OWNER = os.getenv("REPO_OWNER", "")

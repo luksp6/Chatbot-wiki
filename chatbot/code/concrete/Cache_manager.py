@@ -1,8 +1,9 @@
-from Singleton.Singleton import Singleton
-from Singleton.Constants_manager import Constants_manager
-from Observer.Observer import Observer
-from Composite.Compound_service import Compound_service
-from Composite.DB_manager import DB_manager
+from abstract.Singleton.Singleton import Singleton
+from abstract.Observer.Observer import Observer
+from abstract.Composite.Compound_service import Compound_service
+
+from concrete.Constants_manager import Constants_manager
+from concrete.DB_manager import DB_manager
 
 import asyncio
 
@@ -25,8 +26,8 @@ class Cache_manager(Singleton, Observer, Compound_service):
     async def _connect(self):
         """Conectar a Redis de forma asíncrona."""
         if self._service is None:
-            const = Constants_manager()
-            db = DB_manager()
+            const = Constants_manager.get_instance(Constants_manager)
+            db = DB_manager.get_instance(DB_manager)
             self._service = RedisSemanticCache(
                 redis_url=const.REDIS_URL,
                 embeddings= db.get_embeddings(),

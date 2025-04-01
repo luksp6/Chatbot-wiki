@@ -12,6 +12,7 @@ services:
     ports:
       - "${CHATBOT_PORT}:${CHATBOT_PORT}"
     environment:
+      - RESOURCES_PATH=${RESOURCES_PATH}
       - CHATBOT_PORT=${CHATBOT_PORT}
       - REPO_NAME=${REPO_NAME}
       - GITHUB_TOKEN=${GITHUB_TOKEN}
@@ -26,10 +27,9 @@ services:
       - PROMPT=${PROMPT}
       - WORKERS=${WORKERS}
     env_file:
-      - ./chatbot/.env
+      - ./chatbot/code/.env
     volumes:
       - ./chatbot:/app  # Monta el código de tu proyecto en el contenedor
-      - ./chatbot/main.py:/app/main.py
     depends_on:
       - redis  # Asegura que Redis se inicie antes que el chatbot
     restart: unless-stopped

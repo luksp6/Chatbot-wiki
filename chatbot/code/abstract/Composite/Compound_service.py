@@ -1,4 +1,4 @@
-from Composite.Service import Service
+from abstract.Composite.Service import Service
 
 import asyncio
 

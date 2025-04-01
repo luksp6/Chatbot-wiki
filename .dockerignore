@@ -1,7 +1,6 @@
 **/.vscode/
 
-**/FS-WIKI-JSON/
-**/db_wiki/
+**/resources
 
 **/venv/
 **/.venv/

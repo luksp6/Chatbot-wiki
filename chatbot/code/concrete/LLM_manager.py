@@ -1,10 +1,12 @@
-from aux_classes import QueryRequest
-from Singleton.Singleton import Singleton
-from Singleton.Constants_manager import Constants_manager
-from Observer.Observer import Observer
-from Composite.Compound_service import Compound_service
-from Composite.DB_manager import DB_manager
-from Composite.Cache_manager import Cache_manager
+from utils.aux_classes import QueryRequest
+
+from abstract.Singleton.Singleton import Singleton
+from abstract.Observer.Observer import Observer
+from abstract.Composite.Compound_service import Compound_service
+
+from concrete.Constants_manager import Constants_manager
+from concrete.DB_manager import DB_manager
+from concrete.Cache_manager import Cache_manager
 
 from langchain_ollama import OllamaLLM
 from langchain.prompts import PromptTemplate
@@ -25,9 +27,9 @@ class LLM_manager(Singleton, Observer, Compound_service):
 
     async def _connect(self):
         if self._service is None:
-            db_manager = DB_manager()
-            const = Constants_manager()
-            cache = Cache_manager()
+            db = DB_manager.get_instance(DB_manager)
+            const = Constants_manager.get_instance(Constants_manager)
+            cache = Cache_manager.get_instance(Cache_manager)
             set_llm_cache(cache.get_instance())
             self._service = OllamaLLM(
                 model=const.LLM_NAME,
@@ -35,7 +37,7 @@ class LLM_manager(Singleton, Observer, Compound_service):
                 temperature=const.TEMPERATURE,
                 max_tokens=const.MAX_TOKENS
             )
-            self._retriever = db_manager.get_retriever(const.K)
+            self._retriever = db.get_retriever(const.K)
             self._prompt = PromptTemplate(template=const.PROMPT, input_variables=['context', 'question'])
             self._connected.set()
 
@@ -50,7 +52,7 @@ class LLM_manager(Singleton, Observer, Compound_service):
     async def get_response(self, request: QueryRequest):
         """Genera respuestas de manera asíncrona con streaming."""
         try:
-            const = Constants_manager()
+            const = Constants_manager.get_instance(Constants_manager)
             qa = RetrievalQA.from_chain_type(
                 llm=self._service,
                 chain_type=const.CHAIN_TYPE,

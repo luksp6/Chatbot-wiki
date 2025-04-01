@@ -3,6 +3,7 @@ FROM python:3.10
 
 # Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
+ENV PYTHONPATH="/app/code"
 
 # Instalar herramientas necesarias
 RUN apt update && apt install -y curl && apt install -y git && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -26,13 +27,13 @@ ENV CHATBOT_PORT=${CHATBOT_PORT}
 RUN git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/${REPO_OWNER}/${REPO_NAME}.git /app/${REPO_NAME}
 
 # Copiar solo el archivo de requerimientos antes del resto del código
-COPY ./chatbot/requirements.txt /app/requirements.txt
+COPY ./chatbot/code/requirements.txt /app/code/requirements.txt
 
 # Instalar dependencias ANTES de copiar el resto de archivos
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /app/code/requirements.txt
 
 # Copiar los archivos de la aplicación al contenedor
-COPY ./chatbot /app
+COPY ./chatbot/code /app/code
 
 # Cargar variables de entorno
 ARG LLM_NAME
@@ -48,4 +49,4 @@ ARG WORKERS
 ENV WORKERS=${WORKERS}
 
 # Definir el comando de inicio
-CMD ollama serve & sleep 5 && ollama pull $LLM_NAME && gunicorn -w ${WORKERS} -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:${CHATBOT_PORT}
+CMD ollama serve & sleep 5 && ollama pull $LLM_NAME && gunicorn -w ${WORKERS} -k uvicorn.workers.UvicornWorker code.main:app --bind 0.0.0.0:${CHATBOT_PORT}

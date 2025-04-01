@@ -1,5 +1,7 @@
-from Singleton.Singleton import Singleton
-from Observer.Observer import Observer
+from abstract.Singleton.Singleton import Singleton
+from abstract.Observer.Observer import Observer
+
+from concrete.Constants_manager import Constants_manager
 
 import shutil
 import os
@@ -21,8 +23,8 @@ class Documents_manager(Singleton, Observer):
 
     def _get_repo_path(self):
         """Devuelve la ruta local del repositorio."""
-        const = Constants_manager()
-        return os.path.join(os.getcwd(), const.REPO_NAME)
+        const = Constants_manager.get_instance(Constants_manager)
+        return os.path.join(os.getcwd(), const.RESOURCES_PATH, const.REPO_NAME)
 
     def _get_file_hash(self, filepath):
         """Calcula un hash MD5 del contenido de un archivo."""
@@ -35,7 +37,7 @@ class Documents_manager(Singleton, Observer):
         """Actualiza el repositorio local con los últimos cambios de GitHub."""
         print("Actualizando el repositorio desde GitHub...")
 
-        const = Constants_manager()
+        const = Constants_manager.get_instance(Constants_manager)
         repo_url = f"https://{const.GITHUB_TOKEN}:x-oauth-basic@github.com/{const.REPO_OWNER}/{const.REPO_NAME}.git"
         repo_path = self._get_repo_path()
 
@@ -77,5 +79,5 @@ class Documents_manager(Singleton, Observer):
         return Document(page_content=content, metadata={"source": filename, "hash": file_hash})
 
     def get_docs_chunked(self, documents):
-        const = Constants_manager()
+        const = Constants_manager.get_instance(Constants_manager)
         return RecursiveCharacterTextSplitter(chunk_size=const.CHUNK_SIZE, chunk_overlap=const.CHUNK_OVERLAP).split_documents(documents)
