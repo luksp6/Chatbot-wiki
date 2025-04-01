@@ -46,13 +46,15 @@ class Documents_manager(Singleton, Observer):
 
         if not os.path.isdir(repo_path):
             print(f"El directorio {repo_path} no existe. Clonando el repositorio...")
-            await loop.run_in_executor(executor, subprocess.run, ["git", "clone", repo_url, repo_path], {"check": True})
+            await loop.run_in_executor(executor, subprocess.run, ["git", "clone", repo_url, repo_path], None, None, True)
+
         else:
             print(f"El directorio {repo_path} ya existe. Haciendo pull...")
-            await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "pull"], {"check": True})
+            await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "pull"], None, None, True)
+
 
         # Configurar la URL remota por si cambia el token
-        await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], {"check": True})
+        await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], None, None, True)
 
     def _open_json(self, filepath):
         """Carga un archivo json y retorna su contenido"""
