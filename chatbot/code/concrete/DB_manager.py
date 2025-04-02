@@ -1,17 +1,16 @@
+import shutil
 from abstract.Singleton.Singleton import Singleton
 from abstract.Observer.Observer import Observer
 from abstract.Composite.Service import Service
 
+from concrete import Documents_manager
 from concrete.Constants_manager import Constants_manager
 
 import os
-import chromadb.api
 import asyncio
 
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.schema import Document
 
 class DB_manager(Singleton, Observer, Service):
 
@@ -59,7 +58,7 @@ class DB_manager(Singleton, Observer, Service):
     def get_embeddings(self):
         return self._embeddings
 
-    def exists():
+    def exists(self):
         return os.path.exists(self._persist_dir)
 
     def add(self, add_query):
@@ -95,7 +94,6 @@ class DB_manager(Singleton, Observer, Service):
                 self._service.delete(where={"source": file})
             print(f"{len(modified_files)} documentos obsoletos eliminados.")
         
-        const = Constants_manager()
         # Reindexar archivos nuevos o modificados
         if updated_documents:
             print(f"Indexando {len(updated_documents)} documentos nuevos o modificados...")
@@ -107,8 +105,6 @@ class DB_manager(Singleton, Observer, Service):
     async def _delete_database(self):
         """Elimina completamente la base de datos de Chroma."""
         print("Eliminando base de datos...")
-
-        const = Constants_manager.get_instance(Constants_manager)
         if self.exists():
             await asyncio.to_thread(shutil.rmtree, self._persist_dir)
             print("Base de datos eliminada.")
@@ -132,6 +128,7 @@ class DB_manager(Singleton, Observer, Service):
         print(f"Base de datos construida con {len(docs_chunked)} fragmentos.")
 
     def batched_insert(self, documents):
+        const = Constants_manager.get_instance(Constants_manager)
         for i in range(0, len(documents), const.MAX_BATCH_SIZE):
             self._service.add(documents[i : i + const.MAX_BATCH_SIZE])
             print(f"Insertado batch {i // const.MAX_BATCH_SIZE + 1}/{(len(documents) // const.MAX_BATCH_SIZE) + 1}")

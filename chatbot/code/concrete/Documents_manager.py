@@ -3,11 +3,10 @@ from abstract.Observer.Observer import Observer
 
 from concrete.Constants_manager import Constants_manager
 
-import shutil
+from git import Repo
+from git.remote import Remote
 import os
-import subprocess
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
 import warnings
@@ -18,13 +17,25 @@ from langchain.schema import Document
 
 class Documents_manager(Singleton, Observer):
 
-    async def notify(self):
-        await self.update_repo()
+    def __init__(self):
+        self._repo_path = None
+        self._repo_url = None
+        self._repo = None
+        self._remote = None
 
-    def _get_repo_path(self):
-        """Devuelve la ruta local del repositorio."""
+    def start(self):
         const = Constants_manager.get_instance(Constants_manager)
-        return os.path.join(os.getcwd(), const.RESOURCES_PATH, const.REPO_NAME)
+        self._repo_path = os.path.join(os.getcwd(), const.RESOURCES_PATH, const.REPO_NAME)
+        self._repo_url = f"https://{const.GITHUB_TOKEN}:x-oauth-basic@github.com/{const.REPO_OWNER}/{const.REPO_NAME}.git"
+        self.update_repo()
+         
+
+    async def notify(self):
+        self._repo_path = None
+        self._repo_url = None
+        self._repo = None
+        self._remote = None
+        self.start()
 
     def _get_file_hash(self, filepath):
         """Calcula un hash MD5 del contenido de un archivo."""
@@ -33,28 +44,27 @@ class Documents_manager(Singleton, Observer):
             hasher.update(f.read())
         return hasher.hexdigest()
 
-    async def update_repo(self):
+    def update_repo(self):
         """Actualiza el repositorio local con los últimos cambios de GitHub."""
         print("Actualizando el repositorio desde GitHub...")
-
         const = Constants_manager.get_instance(Constants_manager)
-        repo_url = f"https://{const.GITHUB_TOKEN}:x-oauth-basic@github.com/{const.REPO_OWNER}/{const.REPO_NAME}.git"
-        repo_path = self._get_repo_path()
-
-        loop = asyncio.get_event_loop()
-        executor = ThreadPoolExecutor()
-
-        if not os.path.isdir(repo_path):
-            print(f"El directorio {repo_path} no existe. Clonando el repositorio...")
-            await loop.run_in_executor(executor, subprocess.run, ["git", "clone", repo_url, repo_path], None, None, True)
-
+        if os.path.exists(os.path.join(self._repo_path, ".git")):
+            print(f"El repositorio {const.REPO_NAME} ya existe. Haciendo pull...")
+            self._repo = Repo(self._repo_path)
+            if self._remote is None:
+                self._remote = Remote(self._repo, "origin")
+                self._remote.set_url(self._repo_url)
+            self._remote.pull()
         else:
-            print(f"El directorio {repo_path} ya existe. Haciendo pull...")
-            await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "pull"], None, None, True)
-
+            print(f"El repositorio {const.REPO_NAME} no existe. Clonando el repositorio...")
+            self._repo = Repo.clone_from(self._repo_url, self._repo_path)
+            self._remote = Remote(self._repo, const.REPO_NAME)
+        
+        
+        #self._remote.set_url(self._repo_url)
 
         # Configurar la URL remota por si cambia el token
-        await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], None, None, True)
+        #await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], None, None, True)
 
     def _open_json(self, filepath):
         """Carga un archivo json y retorna su contenido"""

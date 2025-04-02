@@ -49,4 +49,4 @@ ARG WORKERS
 ENV WORKERS=${WORKERS}
 
 # Definir el comando de inicio
-CMD ollama serve & sleep 5 && ollama pull $LLM_NAME && gunicorn -w ${WORKERS} -k uvicorn.workers.UvicornWorker code.main:app --bind 0.0.0.0:${CHATBOT_PORT}
+CMD ollama serve & sleep 5 && ollama pull $LLM_NAME && gunicorn --preload -w ${WORKERS} --worker-class async -k uvicorn.workers.UvicornWorker code.main:app --bind 0.0.0.0:${CHATBOT_PORT}

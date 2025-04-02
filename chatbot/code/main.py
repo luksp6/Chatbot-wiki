@@ -1,8 +1,9 @@
 from utils.aux_classes import QueryRequest, GitHubWebhookData
 
 from concrete.Constants_manager import Constants_manager
-
 from concrete.Facade.Chatbot import Chatbot
+
+import os
 
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
@@ -13,6 +14,7 @@ warnings.filterwarnings("ignore")
 const = Constants_manager()
 app = FastAPI()
 chatbot = Chatbot()
+
 
 @app.on_event("startup")
 async def startup_event():

@@ -33,7 +33,7 @@ class Chatbot(Singleton):
         const.add_observer(self.llm)
 
     async def start(self):
-        await self.docs.update_repo()
+        self.docs.start()
         await self.init_services()
 
     async def init_services(self):
