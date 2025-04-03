@@ -3,8 +3,6 @@ from utils.aux_classes import QueryRequest, GitHubWebhookData
 from concrete.Constants_manager import Constants_manager
 from concrete.Facade.Chatbot import Chatbot
 
-import os
-
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from http.client import HTTPException

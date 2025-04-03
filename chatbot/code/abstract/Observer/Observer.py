@@ -4,5 +4,5 @@ class Observer(ABC):
 
     
     @abstractmethod
-    def notify(self):
+    async def notify(self):
         pass

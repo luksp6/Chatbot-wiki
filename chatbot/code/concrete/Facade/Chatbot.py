@@ -21,10 +21,12 @@ class Chatbot(Singleton):
         self.db = DB_manager()
         self._services.append(self.db)
 
-        self.cache = Cache_manager([self.db])
+        self.cache = Cache_manager()
+        self.cache.set_services_to_wait([self.db])
         self._services.append(self.cache)
 
-        self.llm = LLM_manager([self.db, self.cache])
+        self.llm = LLM_manager()
+        self.llm.set_services_to_wait([self.db, self.cache])
         self._services.append(self.llm)
 
         const = Constants_manager()
@@ -34,7 +36,7 @@ class Chatbot(Singleton):
         const.add_observer(self.llm)
 
     async def start(self):
-        self.docs.start()
+        await self.docs.start()
         await self.init_services()
 
     async def init_services(self):
@@ -51,9 +53,10 @@ class Chatbot(Singleton):
     async def update_documents(self):
         await asyncio.to_thread(self.docs.update_repo)
         await asyncio.to_thread(self.db.update_vectors)
+        await self.cache.clear_cache()
         await asyncio.to_thread(self.llm.start)
 
 
-    def reload(self):
-        const = Constants_manager()
-        const.load_environment_variables
+    async def reload(self):
+        const = Constants_manager.get_instance(Constants_manager)
+        await const.load_environment_variables()

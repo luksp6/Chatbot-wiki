@@ -19,6 +19,6 @@ class Observable:
         self._observers.remove(observer)
 
 
-    def notify_observers(self):
+    async def notify_observers(self):
         for observer in self._observers:
-            observer.notify()
+            await observer.notify()

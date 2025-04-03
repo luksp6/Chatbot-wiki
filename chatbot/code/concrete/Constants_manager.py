@@ -2,7 +2,9 @@ from abstract.Singleton.Singleton import Singleton
 from abstract.Observer.Observable import Observable
 
 import os
+import asyncio
 
+import signal
 from dotenv import load_dotenv
 
 class Constants_manager(Singleton, Observable):
@@ -10,9 +12,15 @@ class Constants_manager(Singleton, Observable):
     def __init__(self):
         Observable.__init__(self)
         self._env_path = os.path.join(os.getcwd(), ".env")
-        self.load_environment_variables()
+        self._signal = signal.signal(signal.SIGHUP, self._handle_sighup)
+        self.start()
 
-    def load_environment_variables(self):
+    def _handle_sighup(self, signum, frame):
+            """Convierte la función async en una tarea dentro del event loop"""
+            loop = asyncio.get_event_loop()
+            loop.create_task(self.load_environment_variables())
+
+    def start(self):
         """Carga las variables de entorno desde el archivo .env."""
         if os.path.exists(self._env_path):
             load_dotenv(self._env_path, override=True)
@@ -48,4 +56,7 @@ class Constants_manager(Singleton, Observable):
         self.REDIS_PORT=os.getenv("REDIS_PORT", "6379")
         self.CACHE_THRESHOLD = float(os.getenv("CACHE_THRESHOLD", "0.2"))
         self.CACHE_TTL = int(os.getenv("CACHE_TTL", "3600"))
-        self.notify_observers()
+
+    async def load_environment_variables(self):
+        self.start()        
+        await self.notify_observers()

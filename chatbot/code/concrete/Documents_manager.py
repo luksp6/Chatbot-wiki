@@ -23,19 +23,20 @@ class Documents_manager(Singleton, Observer):
         self._repo = None
         self._remote = None
 
-    def start(self):
+    async def start(self):
         const = Constants_manager.get_instance(Constants_manager)
         self._repo_path = os.path.join(os.getcwd(), const.RESOURCES_PATH, const.REPO_NAME)
         self._repo_url = f"https://{const.GITHUB_TOKEN}:x-oauth-basic@github.com/{const.REPO_OWNER}/{const.REPO_NAME}.git"
-        self.update_repo()
+        await asyncio.to_thread(self.update_repo)
          
 
     async def notify(self):
+        os.rmdir(self._repo_path)
         self._repo_path = None
         self._repo_url = None
         self._repo = None
         self._remote = None
-        self.start()
+        await self.start()
 
     def _get_file_hash(self, filepath):
         """Calcula un hash MD5 del contenido de un archivo."""
@@ -59,17 +60,13 @@ class Documents_manager(Singleton, Observer):
             print(f"El repositorio {const.REPO_NAME} no existe. Clonando el repositorio...")
             self._repo = Repo.clone_from(self._repo_url, self._repo_path)
             self._remote = Remote(self._repo, const.REPO_NAME)
-        
-        
-        #self._remote.set_url(self._repo_url)
 
-        # Configurar la URL remota por si cambia el token
-        #await loop.run_in_executor(executor, subprocess.run, ["git", "-C", repo_path, "remote", "set-url", "origin", repo_url], None, None, True)
 
     def _open_json(self, filepath):
         """Carga un archivo json y retorna su contenido"""
         with open(filepath, 'r', encoding='utf-8') as file:
             return json.load(file)
+
 
     def load_documents(self):
         """Carga y preprocesa todos los documentos repositorio con sus hashes."""
@@ -83,12 +80,14 @@ class Documents_manager(Singleton, Observer):
             print("No se encontraron documentos Json en el repositorio.")
         return documents
 
+
     def get_document(self, filename):
         repo_path = self._get_repo_path()
         filepath = os.path.join(repo_path, filename)
         file_hash = self._get_file_hash(filepath)
         content = json.dumps(self._open_json(filepath), ensure_ascii=False, indent=4)
         return Document(page_content=content, metadata={"source": filename, "hash": file_hash})
+
 
     def get_docs_chunked(self, documents):
         const = Constants_manager.get_instance(Constants_manager)

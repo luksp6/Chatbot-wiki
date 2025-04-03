@@ -7,7 +7,11 @@ class Compound_service(Service):
         super().__init__()
         self._services_to_wait = services_to_wait
 
-    
+
+    def set_services_to_wait(self, services=[]):
+        self._services_to_wait = services
+
+
     async def connect(self):
         """Sobrescribe el método connect para esperar a todos los servicios."""
         # Conecta todos los servicios primero
