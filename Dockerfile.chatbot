@@ -6,28 +6,31 @@ WORKDIR /app
 ENV PYTHONPATH="/app/code"
 
 # Instalar herramientas necesarias
-RUN apt update && apt install -y curl && apt install -y git && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y wget curl git build-essential cmake cargo && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+#Instalar Redis
+RUN wget https://download.redis.io/redis-stable.tar.gz && \
+    tar -xzvf redis-stable.tar.gz && \
+    cd redis-stable && \
+    make && \
+    make install && \
+    cd .. && rm -rf redis-stable redis-stable.tar.gz
+
+#Instalar RediSearch
+RUN git clone --branch v2.6.16 --recursive https://github.com/RediSearch/RediSearch.git && \
+    cd RediSearch && \
+    make setup && \
+    make build && \
+    mv build/redisearch.so /usr/lib/redis/modules/
 
 # Instalar Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Agregar las credenciales con variables de entorno
-ARG GITHUB_TOKEN
-ENV GITHUB_TOKEN=${GITHUB_TOKEN}
-
-ARG REPO_NAME
-ENV REPO_NAME=${REPO_NAME}
-
-ARG REPO_OWNER
-ENV REPO_OWNER=${REPO_OWNER}
-
-ARG CHATBOT_PORT
-ENV CHATBOT_PORT=${CHATBOT_PORT}
-
-RUN git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/${REPO_OWNER}/${REPO_NAME}.git /app/${REPO_NAME}
-
 # Copiar solo el archivo de requerimientos antes del resto del código
 COPY ./chatbot/code/requirements.txt /app/code/requirements.txt
+
+#Actualizar pip
+RUN pip install --upgrade pip
 
 # Instalar dependencias ANTES de copiar el resto de archivos
 RUN pip install --no-cache-dir -r /app/code/requirements.txt
@@ -35,18 +38,26 @@ RUN pip install --no-cache-dir -r /app/code/requirements.txt
 # Copiar los archivos de la aplicación al contenedor
 COPY ./chatbot/code /app/code
 
-# Cargar variables de entorno
-ARG LLM_NAME
-ENV LLM_NAME=${LLM_NAME}
-
 # Exponer los puertos de la aplicación y Ollama
-EXPOSE ${CHATBOT_PORT} 11434  
+EXPOSE ${CHATBOT_PORT} 11434 6379
 
 # Desactivar el buffering de stdout y stderr
 ENV PYTHONUNBUFFERED=1
 
+# Cargar variables de entorno
+ARG LLM_NAME
+ENV LLM_NAME=${LLM_NAME}
+
+ARG CHATBOT_PORT
+ENV CHATBOT_PORT=${CHATBOT_PORT}
+
 ARG WORKERS
 ENV WORKERS=${WORKERS}
 
+ARG REDIS_PORT
+ENV REDIS_PORT=${REDIS_PORT}
+
 # Definir el comando de inicio
-CMD ollama serve & sleep 5 && ollama pull $LLM_NAME && gunicorn --preload -w ${WORKERS} --worker-class async -k uvicorn.workers.UvicornWorker code.main:app --bind 0.0.0.0:${CHATBOT_PORT}
+CMD redis-server --port ${REDIS_PORT} --daemonize no --loadmodule /usr/lib/redis/modules/redisearch.so & \
+    ollama serve & sleep 5 && ollama pull $LLM_NAME && \
+    gunicorn --preload -w ${WORKERS} --worker-class async -k uvicorn.workers.UvicornWorker code.main:app --bind 0.0.0.0:${CHATBOT_PORT}

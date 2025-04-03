@@ -7,6 +7,7 @@ from concrete.DB_manager import DB_manager
 
 import asyncio
 
+from redis import Redis
 from langchain_redis import RedisSemanticCache
 
 class Cache_manager(Singleton, Observer, Compound_service):
@@ -14,6 +15,7 @@ class Cache_manager(Singleton, Observer, Compound_service):
 
     def __init__(self, services_to_wait=[]):
         Compound_service.__init__(self, services_to_wait)
+        self._cache = None
 
 
     async def notify(self):
@@ -28,8 +30,9 @@ class Cache_manager(Singleton, Observer, Compound_service):
         if self._service is None:
             const = Constants_manager.get_instance(Constants_manager)
             db = DB_manager.get_instance(DB_manager)
-            self._service = RedisSemanticCache(
-                redis_url=const.REDIS_URL,
+            self._service = Redis(host=const.REDIS_HOST, port=const.REDIS_PORT)
+            self._cache = RedisSemanticCache(
+                redis_client=self._service,
                 embeddings= db.get_embeddings(),
                 distance_threshold=const.CACHE_THRESHOLD,
                 ttl=const.CACHE_TTL
@@ -42,16 +45,19 @@ class Cache_manager(Singleton, Observer, Compound_service):
         if self._service:
             await self._service.close()
             self._service = None
+            self._cache = None
 
 
     async def clear_cache(self):
         """Limpiar cache"""
-        if self._service:
-            await self._service.clear()        
+        if self._cache:
+            await self._cache.aclear()        
 
 
     def get_instance(self):
         """Devuelve la instancia de RedisSemanticCache."""
         if not self._service:
             raise ValueError("CacheManager aún no está conectado. Espera un momento e intenta de nuevo.")
-        return self._service
+        if not self._cache:
+            raise ValueError("SemanticCache aún no está conectado. Espera un momento e intenta de nuevo.")
+        return self._cache

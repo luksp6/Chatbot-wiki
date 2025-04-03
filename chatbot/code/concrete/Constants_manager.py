@@ -44,7 +44,8 @@ class Constants_manager(Singleton, Observable):
 
             Respuesta útil:
             """)
-        self.REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+        self.REDIS_HOST=os.getenv("REDIS_HOST", "redis://redis")
+        self.REDIS_PORT=os.getenv("REDIS_PORT", "6379")
         self.CACHE_THRESHOLD = float(os.getenv("CACHE_THRESHOLD", "0.2"))
         self.CACHE_TTL = int(os.getenv("CACHE_TTL", "3600"))
         self.notify_observers()
