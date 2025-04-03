@@ -5,8 +5,6 @@ from abstract.Composite.Compound_service import Compound_service
 from concrete.Constants_manager import Constants_manager
 from concrete.DB_manager import DB_manager
 
-import asyncio
-
 from redis import Redis
 from langchain_redis import RedisSemanticCache
 
@@ -54,7 +52,7 @@ class Cache_manager(Singleton, Observer, Compound_service):
             await self._cache.aclear()        
 
 
-    def get_instance(self):
+    def get_cache_instance(self):
         """Devuelve la instancia de RedisSemanticCache."""
         if not self._service:
             raise ValueError("CacheManager aún no está conectado. Espera un momento e intenta de nuevo.")

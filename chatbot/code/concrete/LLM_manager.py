@@ -13,8 +13,6 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.globals import set_llm_cache
 
-import asyncio
-
 class LLM_manager(Singleton, Observer, Compound_service):
 
     def __init__(self, services_to_wait=[]):
@@ -30,7 +28,7 @@ class LLM_manager(Singleton, Observer, Compound_service):
             db = DB_manager.get_instance(DB_manager)
             const = Constants_manager.get_instance(Constants_manager)
             cache = Cache_manager.get_instance(Cache_manager)
-            set_llm_cache(cache.get_instance())
+            set_llm_cache(cache.get_cache_instance())
             self._service = OllamaLLM(
                 model=const.LLM_NAME,
                 streaming=True,

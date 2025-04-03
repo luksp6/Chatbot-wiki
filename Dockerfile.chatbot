@@ -1,27 +1,17 @@
-# Establecer la imagen base de Python 3.10
-FROM python:3.10
+# Establecer la imagen base
+FROM redis/redis-stack-server:latest
 
 # Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
 ENV PYTHONPATH="/app/code"
 
-# Instalar herramientas necesarias
-RUN apt update && apt install -y wget curl git build-essential cmake cargo && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-#Instalar Redis
-RUN wget https://download.redis.io/redis-stable.tar.gz && \
-    tar -xzvf redis-stable.tar.gz && \
-    cd redis-stable && \
-    make && \
-    make install && \
-    cd .. && rm -rf redis-stable redis-stable.tar.gz
-
-#Instalar RediSearch
-RUN git clone --branch v2.6.16 --recursive https://github.com/RediSearch/RediSearch.git && \
-    cd RediSearch && \
-    make setup && \
-    make build && \
-    mv build/redisearch.so /usr/lib/redis/modules/
+# Instalar herramientas necesarias y Python 3.10
+RUN apt update && \
+    apt install -y curl git software-properties-common && \
+    add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt update && \
+    apt install -y python3.10 python3.10-venv python3.10-dev python3-pip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Instalar Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
@@ -30,10 +20,10 @@ RUN curl -fsSL https://ollama.com/install.sh | sh
 COPY ./chatbot/code/requirements.txt /app/code/requirements.txt
 
 #Actualizar pip
-RUN pip install --upgrade pip
+RUN python3.10 -m pip install --upgrade pip
 
 # Instalar dependencias ANTES de copiar el resto de archivos
-RUN pip install --no-cache-dir -r /app/code/requirements.txt
+RUN python3.10 -m pip install --no-cache-dir -r /app/code/requirements.txt
 
 # Copiar los archivos de la aplicación al contenedor
 COPY ./chatbot/code /app/code
@@ -58,6 +48,6 @@ ARG REDIS_PORT
 ENV REDIS_PORT=${REDIS_PORT}
 
 # Definir el comando de inicio
-CMD redis-server --port ${REDIS_PORT} --daemonize no --loadmodule /usr/lib/redis/modules/redisearch.so & \
+CMD redis-server --port ${REDIS_PORT} --daemonize no --loadmodule /opt/redis-stack/lib/redisearch.so & \
     ollama serve & sleep 5 && ollama pull $LLM_NAME && \
-    gunicorn --preload -w ${WORKERS} --worker-class async -k uvicorn.workers.UvicornWorker code.main:app --bind 0.0.0.0:${CHATBOT_PORT}
+    python3.10 -m gunicorn --preload -w ${WORKERS} --worker-class async -k uvicorn.workers.UvicornWorker code.main:app --bind 0.0.0.0:${CHATBOT_PORT}

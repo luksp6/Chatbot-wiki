@@ -1,3 +1,4 @@
+from fastapi.responses import StreamingResponse
 from utils.aux_classes import QueryRequest
 
 from abstract.Singleton.Singleton import Singleton
@@ -43,7 +44,8 @@ class Chatbot(Singleton):
 
 
     async def chat(self, request: QueryRequest):
-        return await self.llm.get_response(request)
+        async for chunk in self.llm.get_response(request):
+            yield chunk
 
 
     async def update_documents(self):
