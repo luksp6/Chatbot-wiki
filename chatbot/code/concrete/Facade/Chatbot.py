@@ -1,4 +1,3 @@
-from fastapi.responses import StreamingResponse
 from utils.aux_classes import QueryRequest
 
 from abstract.Singleton.Singleton import Singleton
@@ -10,6 +9,7 @@ from concrete.DB_manager import DB_manager
 from concrete.LLM_manager import LLM_manager
 
 import asyncio
+import os
 
 class Chatbot(Singleton):
 
@@ -18,6 +18,7 @@ class Chatbot(Singleton):
         self._services = []
         
         self.docs = Documents_manager()
+
         self.db = DB_manager()
         self._services.append(self.db)
 
@@ -29,15 +30,18 @@ class Chatbot(Singleton):
         self.llm.set_services_to_wait([self.db, self.cache])
         self._services.append(self.llm)
 
-        const = Constants_manager()
+        const = Constants_manager.get_instance(Constants_manager)
         const.add_observer(self.docs)
         const.add_observer(self.db)
         const.add_observer(self.cache)
         const.add_observer(self.llm)
 
     async def start(self):
+        deployed = self._was_deployed()
         await self.docs.start()
         await self.init_services()
+        if not deployed:
+            await asyncio.to_thread(self.db.update_vectors)
 
     async def init_services(self):
         for service in self._services:
@@ -56,7 +60,6 @@ class Chatbot(Singleton):
         await self.cache.clear_cache()
         await asyncio.to_thread(self.llm.start)
 
-
-    async def reload(self):
+    def _was_deployed(self):
         const = Constants_manager.get_instance(Constants_manager)
-        await const.load_environment_variables()
+        return os.path.exists(os.path.join(os.getcwd(), const.RESOURCES_PATH))

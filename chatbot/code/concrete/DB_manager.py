@@ -3,7 +3,7 @@ from abstract.Singleton.Singleton import Singleton
 from abstract.Observer.Observer import Observer
 from abstract.Composite.Service import Service
 
-from concrete import Documents_manager
+from concrete.Documents_manager import Documents_manager
 from concrete.Constants_manager import Constants_manager
 
 import os
@@ -60,9 +60,6 @@ class DB_manager(Singleton, Observer, Service):
 
     def exists(self):
         return os.path.exists(self._persist_dir)
-
-    def add(self, add_query):
-        self._service.add_documents(add_query)
 
     def update_vectors(self):
         """Actualiza la base de datos vectorial en Chroma detectando archivos nuevos, eliminados y modificados."""
@@ -130,5 +127,5 @@ class DB_manager(Singleton, Observer, Service):
     def batched_insert(self, documents):
         const = Constants_manager.get_instance(Constants_manager)
         for i in range(0, len(documents), const.MAX_BATCH_SIZE):
-            self._service.add(documents[i : i + const.MAX_BATCH_SIZE])
+            self._service.add_documents(documents[i : i + const.MAX_BATCH_SIZE])
             print(f"Insertado batch {i // const.MAX_BATCH_SIZE + 1}/{(len(documents) // const.MAX_BATCH_SIZE) + 1}")

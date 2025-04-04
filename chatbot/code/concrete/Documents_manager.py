@@ -72,7 +72,7 @@ class Documents_manager(Singleton, Observer):
         """Carga y preprocesa todos los documentos repositorio con sus hashes."""
         print("Cargando documentos...")
         documents = []
-        for filename in self._get_repo_path():
+        for filename in os.listdir(self._repo_path):
             if filename.endswith(".json"):
                 doc = self.get_document(filename)
                 documents.append(doc)
@@ -82,8 +82,7 @@ class Documents_manager(Singleton, Observer):
 
 
     def get_document(self, filename):
-        repo_path = self._get_repo_path()
-        filepath = os.path.join(repo_path, filename)
+        filepath = os.path.join(self._repo_path, filename)
         file_hash = self._get_file_hash(filepath)
         content = json.dumps(self._open_json(filepath), ensure_ascii=False, indent=4)
         return Document(page_content=content, metadata={"source": filename, "hash": file_hash})

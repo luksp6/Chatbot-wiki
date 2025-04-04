@@ -45,14 +45,3 @@ async def update_db(data: GitHubWebhookData):
             print(f"Error al actualizar: {e}")
             return {"status": "error", "message": str(e)}, 500
     return {"status": "ignored", "message": "Evento no relevante."}
-
-
-@app.get("/change-model-variables")
-def change_variables():
-    print("Variables de entorno del modelo modificadas. Actualizando...")
-    try:
-        chatbot.reload()
-        return {"status": "success", "message": "Modelo recargado."}
-    except Exception as e:
-        print(f"Error al actualizar: {e}")
-        return {"status": "error", "message": str(e)}, 500
