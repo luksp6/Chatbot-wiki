@@ -30,7 +30,7 @@ async def query_db(request: QueryRequest):
     if not chatbot.db.exists():
         raise HTTPException(status_code=500, detail="La base de datos no existe. Indexa los documentos primero.")
 
-    return StreamingResponse(chatbot.chat(request), media_type="text/plain")
+    return StreamingResponse(chatbot.chat(request.query), media_type="text/plain")
 
 
 @app.post(const.WEBHOOK_ROUTE)

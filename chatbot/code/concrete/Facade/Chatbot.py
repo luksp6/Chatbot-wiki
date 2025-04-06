@@ -40,6 +40,8 @@ class Chatbot(Singleton):
         deployed = self._was_deployed()
         await self.docs.start()
         await self.init_services()
+        await self.cache.clear_cache()
+        await self.llm.warm_up()
         if not deployed:
             await asyncio.to_thread(self.db.update_vectors)
 
@@ -49,8 +51,8 @@ class Chatbot(Singleton):
             await service.wait_for_connection()
 
 
-    async def chat(self, request: QueryRequest):
-        async for chunk in self.llm.get_response(request):
+    async def chat(self, message):
+        async for chunk in self.llm.get_response(message):
             yield chunk
 
 

@@ -37,6 +37,13 @@ class LLM_manager(Singleton, Observer, Compound_service):
             )
             self._retriever = db.get_retriever(const.K)
             self._prompt = PromptTemplate(template=const.PROMPT, input_variables=['context', 'question'])
+            self._qa = RetrievalQA.from_chain_type(
+                llm=self._service,
+                chain_type=const.CHAIN_TYPE,
+                retriever=self._retriever,
+                return_source_documents=True,
+                chain_type_kwargs={"prompt": self._prompt}
+            )
             self._connected.set()
 
 
@@ -45,30 +52,27 @@ class LLM_manager(Singleton, Observer, Compound_service):
             self._service = None
             self._retriever = None
             self._prompt = None
+            self._qa = None
 
     
-    async def get_response(self, request: QueryRequest):
+    async def warm_up(self):
+        print("Calentando LLM...")
+        response = ""
+        async for chunk in self.get_response("Hola"):
+            response += chunk
+        print(f"Respuesta de calentamiento: {response}")
+
+    
+    async def get_response(self, query=""):
         """Genera respuestas de manera asíncrona con streaming."""
         try:
-            const = Constants_manager.get_instance(Constants_manager)
-            qa = RetrievalQA.from_chain_type(
-                llm=self._service,
-                chain_type=const.CHAIN_TYPE,
-                retriever=self._retriever,
-                return_source_documents=True,
-                chain_type_kwargs={"prompt": self._prompt}
-            )
-
-            sources = set()
-            
-            async for chunk in qa.astream({"query": request.query}):  # Usa la versión asíncrona
+            sources = set()            
+            async for chunk in self._qa.astream({"query": query}):
                 for doc in chunk.get("source_documents", []):
                     sources.add(doc.metadata.get("source", "Desconocido"))
                 yield chunk["result"]
-
             if sources:
-                yield f"\nFuentes: {', '.join(sources)}"
-                
+                yield f"\nFuentes: {', '.join(sources)}"                
         except Exception as e:
             print(f"Error en la generación del stream: {e}")
             yield "Error interno en el servidor. Intenta de nuevo más tarde."
