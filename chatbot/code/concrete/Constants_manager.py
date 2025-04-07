@@ -33,7 +33,6 @@ class Constants_manager(Singleton, Observable):
         self.COLLECTION_NAME = os.getenv('COLLECTION_NAME', 'wiki_db')
         self.EMBEDDING_NAME = os.getenv('EMBEDDING_NAME', 'sentence-transformers/all-mpnet-base-v2')
         self.K = int(os.getenv("K", "3"))
-        self.CHAIN_TYPE = os.getenv('CHAIN_TYPE')
         self.TEMPERATURE = float(os.getenv("TEMPERATURE", "0.7"))
         self.MAX_TOKENS = int(os.getenv("MAX_TOKENS", "512"))
         self.MAX_BATCH_SIZE = int(os.getenv("MAX_BATCH_SIZE", "166"))
@@ -42,7 +41,7 @@ class Constants_manager(Singleton, Observable):
         self.LLM_NAME = os.getenv('LLM_NAME', 'llama3.2')
         self.WEBHOOK_ROUTE = os.getenv('WEBHOOK_ROUTE', "/update-db")
         self.PORT = int(os.getenv('CHATBOT_PORT', "6000"))
-        self.PROMPT = os.getenv('PROMPT', """Usa la siguiente información para responder a la pregunta del usuario.
+        self.SYSTEM_PROMPT = os.getenv('SYSTEM_PROMPT', """Usa la siguiente información para responder a la pregunta del usuario.
             Si no sabes la respuesta, simplemente di que no lo sabes, no intentes inventar una respuesta.
 
             Contexto: {context}
@@ -52,6 +51,7 @@ class Constants_manager(Singleton, Observable):
 
             Respuesta útil:
             """)
+        self.HISTORY_PROMPT =  os.getenv('HISTORY_PROMPT')
         self.REDIS_HOST=os.getenv("REDIS_HOST", "redis://redis")
         self.REDIS_PORT=os.getenv("REDIS_PORT", "6379")
         self.CACHE_THRESHOLD = float(os.getenv("CACHE_THRESHOLD", "0.2"))

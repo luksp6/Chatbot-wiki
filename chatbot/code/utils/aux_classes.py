@@ -1,8 +1,9 @@
+from typing import Optional
 from pydantic import BaseModel
 
 class QueryRequest(BaseModel):
     query: str
-    top_k: int = 3  # Número de respuestas a recuperar# Modelo de consulta
+    session_id: Optional[str] = None
 
 class GitHubWebhookData(BaseModel):
     ref: str | None = None

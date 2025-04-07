@@ -4,8 +4,9 @@ from concrete.Constants_manager import Constants_manager
 from concrete.Facade.Chatbot import Chatbot
 
 from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
 from http.client import HTTPException
+from uuid import uuid4
+
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -29,8 +30,12 @@ async def query_db(request: QueryRequest):
     # Verificar si la base de datos vectorial existe
     if not chatbot.db.exists():
         raise HTTPException(status_code=500, detail="La base de datos no existe. Indexa los documentos primero.")
+    session_id = request.session_id or str(uuid4())
 
-    return StreamingResponse(chatbot.chat(request.query), media_type="text/plain")
+
+    answer, sources = await chatbot.chat(session_id, request.query)
+
+    return {'session_id': session_id, 'answer': answer, 'sources': sources}
 
 
 @app.post(const.WEBHOOK_ROUTE)

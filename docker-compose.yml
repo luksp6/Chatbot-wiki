@@ -4,34 +4,18 @@ services:
       context: .
       dockerfile: Dockerfile.chatbot
       args:
-        - GITHUB_TOKEN=${GITHUB_TOKEN}
-        - REPO_OWNER=${REPO_OWNER}
-        - REPO_NAME=${REPO_NAME}
+        - LLM_NAME=${LLM_NAME}
         - CHATBOT_PORT=${CHATBOT_PORT}
         - WORKERS=${WORKERS}
         - REDIS_PORT=${REDIS_PORT}
     ports:
       - "${CHATBOT_PORT}:${CHATBOT_PORT}"
     environment:
-      - RESOURCES_PATH=${RESOURCES_PATH}
-      - CHATBOT_PORT=${CHATBOT_PORT}
-      - REPO_NAME=${REPO_NAME}
-      - GITHUB_TOKEN=${GITHUB_TOKEN}
-      - REPO_OWNER=${REPO_OWNER}
-      - DB_PATH=${DB_PATH}
-      - COLLECTION_NAME=${COLLECTION_NAME}
-      - EMBEDDING_NAME=${EMBEDDING_NAME}
       - LLM_NAME=${LLM_NAME}
-      - MAX_BATCH_SIZE=${MAX_BATCH_SIZE}
-      - CHUNK_SIZE=${CHUNK_SIZE}
-      - CHUNK_OVERLAP=${CHUNK_OVERLAP}
-      - PROMPT=${PROMPT}
+      - CHATBOT_PORT=${CHATBOT_PORT}
       - WORKERS=${WORKERS}
-      - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
-      - CACHE_THRESHOLD=${CACHE_THRESHOLD}
-      - CACHE_TTL=${CACHE_TTL}
     env_file:
       - ./chatbot/code/.env
     volumes:
-      - ./chatbot:/app  # Monta el código de tu proyecto en el contenedor
+      - ./chatbot:/app

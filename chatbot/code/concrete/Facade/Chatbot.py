@@ -1,5 +1,3 @@
-from utils.aux_classes import QueryRequest
-
 from abstract.Singleton.Singleton import Singleton
 
 from concrete.Constants_manager import Constants_manager
@@ -40,10 +38,10 @@ class Chatbot(Singleton):
         deployed = self._was_deployed()
         await self.docs.start()
         await self.init_services()
-        await self.cache.clear_cache()
-        await self.llm.warm_up()
         if not deployed:
             await asyncio.to_thread(self.db.update_vectors)
+        await self.llm.warm_up()
+        await self.cache.clear_cache()
 
     async def init_services(self):
         for service in self._services:
@@ -51,9 +49,8 @@ class Chatbot(Singleton):
             await service.wait_for_connection()
 
 
-    async def chat(self, message):
-        async for chunk in self.llm.get_response(message):
-            yield chunk
+    async def chat(self, session_id, message):
+        return await self.llm.get_response(session_id, message)
 
 
     async def update_documents(self):
