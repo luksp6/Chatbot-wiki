@@ -32,10 +32,10 @@ async def query_db(request: QueryRequest):
         raise HTTPException(status_code=500, detail="La base de datos no existe. Indexa los documentos primero.")
     session_id = request.session_id or str(uuid4())
 
+    chatbot_response = await chatbot.chat(session_id, request.query)
+    chatbot_response["session_id"] = session_id
 
-    answer, sources = await chatbot.chat(session_id, request.query)
-
-    return {'session_id': session_id, 'answer': answer, 'sources': sources}
+    return chatbot_response
 
 
 @app.post(const.WEBHOOK_ROUTE)

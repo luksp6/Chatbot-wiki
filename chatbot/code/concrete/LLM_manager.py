@@ -8,7 +8,6 @@ from concrete.Cache_manager import Cache_manager
 
 from langchain_ollama import ChatOllama
 from langchain.prompts import ChatPromptTemplate
-from langchain.globals import set_llm_cache
 
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -32,9 +31,6 @@ class LLM_manager(Singleton, Observer, Compound_service):
         if self._service is None:
             db = DB_manager.get_instance(DB_manager)
             const = Constants_manager.get_instance(Constants_manager)
-            #cache = Cache_manager.get_instance(Cache_manager)
-
-            #set_llm_cache(cache.get_cache_instance())
 
             self._service = ChatOllama(
                 model=const.LLM_NAME,
@@ -80,19 +76,30 @@ class LLM_manager(Singleton, Observer, Compound_service):
     
     async def warm_up(self):
         print("Calentando LLM...")
-        response, _ = await self.get_response("Hola, esta es una consulta de calentamiento. No me interesa tu respuesta.")
-        self.clear_history()
-        print(f"Respuesta de calentamiento: {response}")
+        await self.rag_chain.ainvoke({"input": "", "chat_history": []})
+        print("Calentamiento finalizado.")
 
     
     async def get_response(self, session_id="default", question=""):
         """Genera una respuesta asíncrona."""
         try:
-            response = await self.rag_chain.ainvoke({"input": question, "chat_history": self._get_history(session_id)})
-            sources = set(doc.metadata["source"] for doc in response["context"])
+            llm_string = self._service.__class__._get_llm_string(self._service)
 
-            self._add_to_history(session_id, question, response["answer"])
-            return response["answer"], sources
+            cache = Cache_manager.get_instance(Cache_manager)
+            cached = await cache.get_cached_answer(question.strip(), llm_string)
+            if cached:
+                print("[Cache] Respuesta obtenida desde la caché.")
+                return cached
+
+            response = await self.rag_chain.ainvoke({"input": question.strip(), "chat_history": self._get_history(session_id)})
+            sources = set(doc.metadata["source"] for doc in response["context"])
+            output = {"answer": response["answer"], "sources": list(sources)}
+
+            self._add_to_history(session_id, question.strip(), str(response["answer"]).strip())
+
+            await cache.set_cached_answer(question.strip(), llm_string, output)
+
+            return output
         except Exception as e:
             print(f"Error en la generación de la respuesta: {e}")
             return "Error interno en el servidor. Intenta de nuevo más tarde."
@@ -103,8 +110,8 @@ class LLM_manager(Singleton, Observer, Compound_service):
 
     def _add_to_history(self, session_id, question, answer):
         history = self._get_history(session_id)
-        history.append({"role": "user", "content": question})
-        history.append({"role": "system", "content": answer})
+        history.append(HumanMessage(content=question))
+        history.append(AIMessage(content=answer))
 
 
     def clear_session_history(self, session_id):

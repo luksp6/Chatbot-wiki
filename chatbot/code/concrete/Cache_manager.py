@@ -7,6 +7,9 @@ from concrete.DB_manager import DB_manager
 
 from redis import Redis
 from langchain_redis import RedisSemanticCache
+from langchain_core.outputs import Generation
+
+import json
 
 class Cache_manager(Singleton, Observer, Compound_service):
     
@@ -51,11 +54,26 @@ class Cache_manager(Singleton, Observer, Compound_service):
         if self._cache:
             await self._cache.aclear()        
 
+        
+    async def get_cached_answer(self, prompt: str, model_config) -> dict | None:
+        """Devuelve un diccionario con 'answer' y 'sources' desde la caché."""
+        if self._cache:
+            try:
+                cached_result = await self._cache.alookup(prompt=prompt, llm_string=model_config)
+                if cached_result:
+                    try:
+                        return json.loads(cached_result[0].text)
+                    except Exception as e:
+                        print(f"[Cache] Error al decodificar JSON desde cache: {e}")
+            except Exception as e:
+                print(f"[Cache] Error al obtener cache: {e}")
+        return None
 
-    def get_cache_instance(self):
-        """Devuelve la instancia de RedisSemanticCache."""
-        if not self._service:
-            raise ValueError("CacheManager aún no está conectado. Espera un momento e intenta de nuevo.")
-        if not self._cache:
-            raise ValueError("SemanticCache aún no está conectado. Espera un momento e intenta de nuevo.")
-        return self._cache
+
+    async def set_cached_answer(self, prompt: str, model_config, json_answer):
+        """Guarda un diccionario en la caché con la respuesta y sus fuentes."""
+        if self._cache:
+            try:   
+                await self._cache.aupdate(prompt=prompt, llm_string=model_config, return_val=[Generation(text=json.dumps(json_answer))])
+            except Exception as e:
+                print(f"[Cache] Error al guardar en cache: {e}")
