@@ -79,30 +79,58 @@ class LLM_manager(Singleton, Observer, Compound_service):
         await self.rag_chain.ainvoke({"input": "", "chat_history": []})
         print("Calentamiento finalizado.")
 
+
+    async def _retrieve_docs(self, session_id, input):
+        return await self._history_aware_retriever.ainvoke({
+            "input": input,
+            "chat_history": self._get_history(session_id)
+        })
     
     async def get_response(self, session_id="default", question=""):
         """Genera una respuesta asíncrona."""
-        try:
-            llm_string = self._service.__class__._get_llm_string(self._service)
+        #try:
+        llm_string = self._service.__class__._get_llm_string(self._service)
 
-            cache = Cache_manager.get_instance(Cache_manager)
-            cached = await cache.get_cached_answer(question.strip(), llm_string)
-            if cached:
-                print("[Cache] Respuesta obtenida desde la caché.")
-                return cached
 
-            response = await self.rag_chain.ainvoke({"input": question.strip(), "chat_history": self._get_history(session_id)})
-            sources = set(doc.metadata["source"] for doc in response["context"])
-            output = {"answer": response["answer"], "sources": list(sources)}
+        retrieved_docs = await self._retrieve_docs(session_id, question.strip())
+        rendered_prompt = self._qa_prompt.format(
+            input=question.strip(),
+            context="\n".join([doc.page_content for doc in retrieved_docs])
+        )
 
-            self._add_to_history(session_id, question.strip(), str(response["answer"]).strip())
+        response = await self._service.ainvoke(rendered_prompt.to_messages())
+        self._add_to_history(session_id, question.strip(), str(response["answer"]).strip())
 
-            await cache.set_cached_answer(question.strip(), llm_string, output)
+        sources = list({doc.metadata.get("source") for doc in retrieved_docs})
+        output = {
+            "answer": response.content,
+            "sources": sources
+        }
 
-            return output
-        except Exception as e:
-            print(f"Error en la generación de la respuesta: {e}")
-            return "Error interno en el servidor. Intenta de nuevo más tarde."
+        rendered_prompt = str(self._qa_prompt.format(input=question.strip()))
+        print("rendered prompt: ", rendered_prompt)
+
+        cache = Cache_manager.get_instance(Cache_manager)
+        cached = await cache.get_cached_answer(rendered_prompt, llm_string)
+        if cached:
+            print("[Cache] Respuesta obtenida desde la caché.")
+            return cached
+
+        response = await self.rag_chain.ainvoke({"input": question.strip(), "chat_history": self._get_history(session_id)})
+        self._add_to_history(session_id, question.strip(), str(response["answer"]).strip())
+
+        context_docs = response.get("context", [])
+        sources = set()
+        for doc in context_docs:
+            if hasattr(doc, "metadata") and "source" in doc.metadata:
+                sources.add(doc.metadata["source"])
+
+        output = {"answer": response["answer"], "sources": list(sources)}
+        await cache.set_cached_answer(rendered_prompt, llm_string, output)
+        return output
+        #except Exception as e:
+        #    print(f"Error en la generación de la respuesta: {e}")
+        #    return {"answer": "Error interno en el servidor. Intenta de nuevo más tarde."}
     
 
     def _get_history(self, session_id):
